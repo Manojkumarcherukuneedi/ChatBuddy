@@ -4,14 +4,12 @@ const { getDB, run } = require("../models/db");
 const { authRequired } = require("../middleware/auth");
 require("dotenv").config();
 
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+const OpenAI = require("openai");
 
-// Ensure key exists
-if (!process.env.GEMINI_API_KEY) {
-  console.error("❌ ERROR: GEMINI_API_KEY is missing!");
-}
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+// Initialize OpenAI
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
 
 router.post("/", authRequired, async (req, res) => {
   const db = getDB();
@@ -19,21 +17,24 @@ router.post("/", authRequired, async (req, res) => {
   const userText = req.body.message || "";
 
   try {
-    const model = genAI.getGenerativeModel({
-    model: "gemini-1.5-flash"
-});
+    const response = await client.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are ChatBuddy. Reply in 2–3 short friendly sentences. Be casual and supportive."
+        },
+        {
+          role: "user",
+          content: userText
+        }
+      ]
+    });
 
+    const botText = response.choices[0].message.content;
 
-    const prompt = `
-You are ChatBuddy.
-Respond in ONLY 2–3 short friendly sentences.
-Keep replies simple and casual.
-User: "${userText}"
-`;
-
-    const result = await model.generateContent(prompt);
-    const botText = result?.response?.text() || "I'm not sure what to say 😅";
-
+    // Save chat to history
     await run(
       db,
       `INSERT INTO history (user_id, user_text, bot_text)
@@ -42,11 +43,10 @@ User: "${userText}"
     );
 
     res.json({ reply: botText });
-
   } catch (err) {
     console.error("CHAT ERROR:", err);
-    return res.json({
-      reply: "⚠️ AI did not respond. Check API key / server config."
+    res.json({
+      reply: "⚠️ AI did not respond. Please try again later."
     });
   }
 });

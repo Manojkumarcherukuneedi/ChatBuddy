@@ -2,32 +2,34 @@ const express = require("express");
 const router = express.Router();
 const { getDB, run } = require("../models/db");
 const { authRequired } = require("../middleware/auth");
+require("dotenv").config();
 
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+const OpenAI = require("openai");
 
-// Initialize Gemini
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+// Initialize OpenAI
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
 
 router.get("/motivate", authRequired, async (req, res) => {
   const db = getDB();
   const userId = req.user.id;
 
   try {
-    const model = genAI.getGenerativeModel({
-  model: "gemini-1.5-flash"
-});
+    const response = await client.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content:
+            "Give a short motivational quote (1–2 sentences). Make it positive and simple."
+        }
+      ]
+    });
 
-    
+    const botText = response.choices[0].message.content;
 
-    const prompt = `
-Give a short motivational quote (1–2 sentences only).
-Do not write long paragraphs.
-Be uplifting and positive.
-`;
-
-    const result = await model.generateContent(prompt);
-    const botText = result?.response?.text() || "Keep going — you got this! 💪";
-
+    // Save message
     await run(
       db,
       `INSERT INTO history (user_id, user_text, bot_text)
@@ -36,7 +38,6 @@ Be uplifting and positive.
     );
 
     res.json({ message: botText });
-
   } catch (err) {
     console.error("MOTIVATION ERROR:", err);
     res.json({
