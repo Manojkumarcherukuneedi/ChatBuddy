@@ -227,3 +227,48 @@ function logout() {
   localStorage.removeItem("token");
   window.location.href = "/login.html";
 }
+// ======================================================================
+// SETTINGS SYSTEM (Font Size + Theme)
+// ======================================================================
+
+// Apply settings on page load
+function applySettings() {
+  const size = localStorage.getItem("fontSize") || "medium";
+  const theme = localStorage.getItem("theme") || "dark";
+
+  // Apply font size to chat container
+  const chat = document.getElementById("chatContainer");
+  chat.classList.remove("font-small", "font-medium", "font-large");
+  chat.classList.add("font-" + size);
+
+  // Apply theme
+  if (theme === "light") {
+    document.body.classList.remove("dark");
+  } else {
+    document.body.classList.add("dark");
+  }
+
+  // Pre-select radio buttons if they exist on the page
+  const sizeRadio = document.querySelector(`input[name="fontSize"][value="${size}"]`);
+  const themeRadio = document.querySelector(`input[name="theme"][value="${theme}"]`);
+
+  if (sizeRadio) sizeRadio.checked = true;
+  if (themeRadio) themeRadio.checked = true;
+}
+
+applySettings(); // Run settings on load
+
+
+// Save settings when clicking "Save"
+function saveSettings() {
+  const size = document.querySelector('input[name="fontSize"]:checked').value;
+  const theme = document.querySelector('input[name="theme"]:checked').value;
+
+  // Save choices
+  localStorage.setItem("fontSize", size);
+  localStorage.setItem("theme", theme);
+
+  applySettings(); // Reapply immediately
+
+  alert("Settings saved!");
+}

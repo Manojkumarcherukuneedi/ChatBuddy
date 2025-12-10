@@ -382,3 +382,16 @@ input:checked + .slider:before {
   font-size: 18px;
   cursor: pointer;
 }
+/* FONT SIZE SETTINGS */
+.font-small {
+  font-size: 14px !important;
+}
+
+.font-medium {
+  font-size: 17px !important;
+}
+
+.font-large {
+  font-size: 20px !important;
+}
+

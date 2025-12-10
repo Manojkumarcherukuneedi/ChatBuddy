@@ -289,27 +289,27 @@ input:checked + .slider:before {
 
 
 
-<!-- ⭐⭐⭐ SETTINGS PAGE ⭐⭐⭐ -->
+<!-- SETTINGS PAGE -->
 <div id="settingsPage" class="page">
   <h2>Chat Preferences</h2>
 
-  <div class="option-box">
+  <div class="section">
     <h3>Font Size</h3>
     <label><input type="radio" name="fontSize" value="small"> Small</label><br>
     <label><input type="radio" name="fontSize" value="medium" checked> Medium</label><br>
     <label><input type="radio" name="fontSize" value="large"> Large</label>
   </div>
 
-  <div class="option-box">
+  <div class="section">
     <h3>Theme Colors</h3>
     <label><input type="radio" name="theme" value="light"> Light</label><br>
-    <label><input type="radio" name="theme" value="dark" checked> Dark</label><br>
-    <label><input type="radio" name="theme" value="colorful"> Colorful</label>
+    <label><input type="radio" name="theme" value="dark" checked> Dark</label>
   </div>
 
-  <button>Save</button>
-  <button onclick="closePages()" style="margin-top:10px;">Back</button>
+  <button onclick="saveSettings()">Save</button>
+  <button onclick="closePages()">Back</button>
 </div>
+
 
 
 
