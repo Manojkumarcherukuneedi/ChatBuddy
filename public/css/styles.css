@@ -407,4 +407,17 @@ body, html {
   height: 100%;
   background: none !important;
 }
-
+/* FINAL FIX — FORCE ALL MENU PAGES TO HAVE GRADIENT BACKGROUND */
+.page {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: linear-gradient(135deg, #26D0CE, #1A2980) !important;
+    color: white !important;
+    padding: 30px !important;
+    overflow-y: auto !important;
+    z-index: 999 !important;
+    border-radius: 0 !important;
+}
