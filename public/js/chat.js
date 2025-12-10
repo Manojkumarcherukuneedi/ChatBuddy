@@ -31,7 +31,7 @@ function addMessage(text, type) {
   msg.textContent = text;
 
   box.appendChild(msg);
-  box.scrollTop = box.scrollHeight; // auto-scroll DOWN for live chat
+  box.scrollTop = box.scrollHeight;
 }
 
 // ======================================================================
@@ -62,7 +62,7 @@ async function sendMsg() {
   }
 }
 
-// ENTER to send
+// ENTER to send message
 document.getElementById("msgInput").addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
@@ -104,7 +104,6 @@ async function loadHistory() {
       return;
     }
 
-    // Timestamp Header
     const first = history[0];
     const fixedDate = new Date(first.created_at.replace(" ", "T") + "Z");
 
@@ -113,7 +112,6 @@ async function loadHistory() {
     header.textContent = "🗓️ " + fixedDate.toLocaleString("en-US");
     box.appendChild(header);
 
-    // Append all messages (no auto-scroll override)
     history.forEach((h) => {
       if (h.user_text) {
         const u = document.createElement("div");
@@ -129,7 +127,6 @@ async function loadHistory() {
       }
     });
 
-    // Auto-scroll to TOP
     box.scrollTop = 0;
   } catch {
     addMessage("⚠️ Couldn't load history right now.", "bot");
@@ -149,7 +146,6 @@ async function deleteHistory() {
     });
 
     const data = await res.json();
-
     const box = document.getElementById("chatBox");
     box.innerHTML = "";
 
@@ -164,7 +160,7 @@ async function deleteHistory() {
 }
 
 // ======================================================================
-// ACCOUNT SECTION
+// ACCOUNT PAGE
 // ======================================================================
 function openAccount() {
   closeMenu();
@@ -200,11 +196,12 @@ function closeAccount() {
 }
 
 // ======================================================================
-// NAVIGATION (MENU PAGES)
+// MENU PAGE FUNCTIONS
 // ======================================================================
 function showPage(id) {
   closeMenu();
   document.getElementById("chatContainer").style.display = "none";
+
   document.querySelectorAll(".page").forEach((p) => (p.style.display = "none"));
   document.getElementById(id).style.display = "block";
 }
@@ -221,9 +218,6 @@ function goHome() {
   addMessage("Welcome back! 👋 Start chatting again!", "bot");
 }
 
-// ======================================================================
-// SIDEBAR MENU FUNCTIONS (Missing earlier!)
-// ======================================================================
 function openSettings() {
   showPage("settingsPage");
 }
@@ -241,7 +235,7 @@ function openAbout() {
 }
 
 // ======================================================================
-// SIDEBAR OPEN/CLOSE
+// SIDEBAR MENU
 // ======================================================================
 function openMenu() {
   document.getElementById("sideMenu").style.left = "0px";
@@ -251,4 +245,13 @@ function openMenu() {
 function closeMenu() {
   document.getElementById("sideMenu").style.left = "-260px";
   document.getElementById("overlay").style.display = "none";
+}
+
+// ======================================================================
+// LOGOUT — FIXED 🔥
+// ======================================================================
+function logout() {
+  console.log("Logging out...");
+  localStorage.removeItem("token");
+  window.location.href = "/login.html";
 }
