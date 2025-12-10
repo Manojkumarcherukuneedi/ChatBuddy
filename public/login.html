@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ChatBuddy - Login</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div class="login-wrapper">
+    <div class="login-card">
+      <h2 class="logo-text">ChatBuddy</h2>
+
+      <input id="username" placeholder="Username" />
+      <input id="password" type="password" placeholder="Password" />
+
+      <button id="loginBtn">Login</button>
+
+      <p class="muted">Don’t have an account?
+        <a href="/register.html">Sign Up</a>
+      </p>
+
+      <p id="error" class="error"></p>
+    </div>
+  </div>
+
+  <script src="/js/login.js"></script>
+  <script>
+    // Allow pressing Enter in password field to trigger login
+    const pwdInput = document.getElementById("password");
+    const loginBtn = document.getElementById("loginBtn");
+
+    if (pwdInput && loginBtn) {
+      pwdInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          loginBtn.click();
+        }
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ChatBuddy - Register</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+
+  <style>
+    /* Improved gradient */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #26D0CE, #1A2980);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .password-group {
+      position: relative;
+      width: 100%;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 14px;
+      color: #333;
+    }
+
+    /* Strength bar wrapper */
+    .strength-wrapper {
+      display: none;
+      gap: 8px;
+      margin-top: 6px;
+      width: 90%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .strength-seg {
+      height: 8px;
+      flex: 1;
+      border-radius: 10px;
+      background: #ddd;
+      transition: 0.3s;
+    }
+
+    /* Weak password text */
+    #password-warning {
+      text-align: center;
+      color: red;
+      margin-top: 6px;
+      font-size: 14px;
+      min-height: 18px;
+    }
+
+    /* Green success glow */
+    .success-animate {
+      animation: successGlow 1s ease-out;
+    }
+
+    @keyframes successGlow {
+      0% { box-shadow: 0 0 0px rgba(0,255,140,0); }
+      50% { box-shadow: 0 0 18px rgba(0,255,140,0.9); }
+      100% { box-shadow: 0 0 0px rgba(0,255,140,0); }
+    }
+
+    /* Shake error animation */
+    .shake {
+      animation: shake 0.3s linear;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0px); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(0px); }
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="login-wrapper">
+    <div class="login-card" id="cardBox">
+
+      <h2 class="logo-text">Create Account</h2>
+
+      <input id="reg-username" placeholder="Username" />
+
+      <!-- Password -->
+      <div class="password-group">
+        <input id="reg-password" type="password" placeholder="Password" />
+        <span class="toggle-password" onclick="togglePw('reg-password')">Show</span>
+      </div>
+
+      <!-- Strength Bar -->
+      <div class="strength-wrapper">
+        <div class="strength-seg" id="seg1"></div>
+        <div class="strength-seg" id="seg2"></div>
+        <div class="strength-seg" id="seg3"></div>
+      </div>
+
+      <!-- Weak Password Message -->
+      <p id="password-warning"></p>
+
+      <!-- Confirm Password -->
+      <div class="password-group" style="margin-top:12px;">
+        <input id="reg-password2" type="password" placeholder="Confirm Password" />
+        <span class="toggle-password" onclick="togglePw('reg-password2')">Show</span>
+      </div>
+
+      <button id="registerBtn">Register</button>
+
+      <p class="muted">Already have an account?
+        <a href="/login.html">Login</a>
+      </p>
+
+      <p id="reg-error" class="error"></p>
+
+    </div>
+  </div>
+
+  <script>
+
+    /* Show/Hide Password */
+    function togglePw(id) {
+      const input = document.getElementById(id);
+      const toggle = input.nextElementSibling;
+
+      if (input.type === "password") {
+        input.type = "text";
+        toggle.textContent = "Hide";
+      } else {
+        input.type = "password";
+        toggle.textContent = "Show";
+      }
+    }
+
+    /* Shake Animation Helper */
+    function shakeField(id) {
+      const box = document.getElementById(id);
+      box.classList.add("shake");
+      setTimeout(() => box.classList.remove("shake"), 350);
+    }
+
+    /* Strength Meter Logic */
+    const pw = document.getElementById("reg-password");
+    const wrapper = document.querySelector(".strength-wrapper");
+    const seg1 = document.getElementById("seg1");
+    const seg2 = document.getElementById("seg2");
+    const seg3 = document.getElementById("seg3");
+    const pwWarning = document.getElementById("password-warning");
+
+    pw.addEventListener("input", () => {
+      const val = pw.value.trim();
+      wrapper.style.display = val.length > 0 ? "flex" : "none";
+      pwWarning.textContent = "";
+
+      let strength = 0;
+      if (val.length >= 6) strength++;
+      if (/[A-Z]/.test(val)) strength++;
+      if (/[0-9]/.test(val) || /[^A-Za-z0-9]/.test(val)) strength++;
+
+      seg1.style.background = "#ddd";
+      seg2.style.background = "#ddd";
+      seg3.style.background = "#ddd";
+
+      if (strength >= 1) seg1.style.background = "red";
+      if (strength >= 2) seg2.style.background = "orange";
+      if (strength >= 3) seg3.style.background = "green";
+
+      if (val.length > 0 && strength < 3) {
+        pwWarning.textContent =
+          "Weak password. Must include: 6+ chars, 1 uppercase letter, and at least 1 number or symbol.";
+      } else {
+        pwWarning.textContent = "";
+      }
+    });
+
+    /* Register Logic */
+    async function registerUser(username, password) {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      return res.json().then(data => ({ ok: res.ok, data }));
+    }
+
+    document.getElementById('registerBtn').addEventListener('click', async () => {
+      const u = document.getElementById('reg-username').value.trim();
+      const p = document.getElementById('reg-password').value.trim();
+      const p2 = document.getElementById('reg-password2').value.trim();
+      const errorBox = document.getElementById('reg-error');
+
+      errorBox.textContent = "";
+
+      if (!u || !p || !p2) {
+        errorBox.textContent = "Fill in all fields";
+        shakeField("reg-username");
+        shakeField("reg-password");
+        shakeField("reg-password2");
+        return;
+      }
+
+      if (pwWarning.textContent !== "") {
+        errorBox.textContent = "Please fix your password before registering.";
+        shakeField("reg-password");
+        return;
+      }
+
+      if (p !== p2) {
+        errorBox.textContent = "Passwords do not match";
+        shakeField("reg-password");
+        shakeField("reg-password2");
+        return;
+      }
+
+      const result = await registerUser(u, p);
+
+      if (result.ok) {
+        errorBox.style.color = "green";
+        errorBox.textContent = "Account created! Redirecting to login...";
+        document.getElementById("cardBox").classList.add("success-animate");
+
+        setTimeout(() => {
+          window.location.href = "/login.html";
+        }, 1200);
+
+      } else {
+        errorBox.textContent = result.data.error || "Registration failed";
+      }
+    });
+
+  </script>
+
+</body>
+</html>
