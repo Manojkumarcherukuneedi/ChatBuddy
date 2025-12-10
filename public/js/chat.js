@@ -229,26 +229,24 @@ function logout() {
 
 function applySettings() {
   const size = localStorage.getItem("fontSize") || "medium";
-  const theme = localStorage.getItem("theme") || "dark";
+  const theme = localStorage.getItem("theme") || "light"; // DEFAULT FIXED
 
-  // Apply font size globally
   document.body.classList.remove("font-small", "font-medium", "font-large");
   document.body.classList.add(`font-${size}`);
 
-  // Apply theme
   if (theme === "light") {
     document.body.classList.remove("dark");
   } else {
     document.body.classList.add("dark");
   }
 
-  // Pre-select radios only if they exist
   const sizeRadio = document.querySelector(`input[name="fontSize"][value="${size}"]`);
   const themeRadio = document.querySelector(`input[name="theme"][value="${theme}"]`);
 
   if (sizeRadio) sizeRadio.checked = true;
   if (themeRadio) themeRadio.checked = true;
 }
+
 
 
 applySettings(); // run at startup
