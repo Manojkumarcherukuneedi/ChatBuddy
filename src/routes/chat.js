@@ -4,14 +4,13 @@ const { getDB, run } = require("../models/db");
 const { authRequired } = require("../middleware/auth");
 require("dotenv").config();
 
-const { GoogleGenAI } = require("@google/genai");
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-// Load API key
+// Log API load
 console.log("Loaded KEY:", process.env.GEMINI_API_KEY);
 
-const genAI = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY
-});
+// Initialize Gemini client
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 router.post("/", authRequired, async (req, res) => {
   const db = getDB();
@@ -19,34 +18,29 @@ router.post("/", authRequired, async (req, res) => {
   const userText = req.body.message || "";
 
   try {
-    // AI REQUEST — SHORT & FRIENDLY
-    const response = await genAI.models.generateContent({
-      model: "gemini-2.0-flash",
-      contents: [
-        {
-          role: "user",
-          parts: [
-            {
-              text: `
+    // Select model
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash" // FAST, ACCURATE, PUBLIC MODEL
+    });
+
+    // AI request
+    const prompt = `
 You are ChatBuddy.
-Respond in **ONLY 2–3 short friendly sentences**.
+Respond in ONLY 2–3 short friendly sentences.
 Keep replies simple, helpful, and casual.
 Do NOT write long paragraphs.
 
 User: "${userText}"
-              `
-            }
-          ]
-        }
-      ]
-    });
+    `;
 
-    // Extract model output
+    const result = await model.generateContent(prompt);
+
+    // Extract output
     const botText =
-      response?.candidates?.[0]?.content?.parts?.[0]?.text ||
+      result?.response?.candidates?.[0]?.content?.parts?.[0]?.text ||
       "I'm not sure what to say 😅";
 
-    // Save message to database
+    // Save message in DB
     await run(
       db,
       `INSERT INTO history (user_id, user_text, bot_text)
