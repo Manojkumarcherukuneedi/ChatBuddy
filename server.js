@@ -12,7 +12,7 @@ const { initDB } = require('./src/models/db');
 const admin = require('firebase-admin');
 
 if (!process.env.FIREBASE_KEY_BASE64) {
-  console.error("❌ ERROR: FIREBASE_KEY_BASE64 missing in .env");
+  console.error("❌ FIREBASE_KEY_BASE64 missing in .env");
   process.exit(1);
 }
 
@@ -22,8 +22,8 @@ try {
     Buffer.from(process.env.FIREBASE_KEY_BASE64, "base64").toString("utf8")
   );
 } catch (err) {
-    console.error("❌ Failed to parse Firebase Base64 key:", err);
-    process.exit(1);
+  console.error("❌ Failed to parse Firebase key:", err);
+  process.exit(1);
 }
 
 admin.initializeApp({
@@ -54,35 +54,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // =============================
-// FRONTEND ROUTES (Fix Render "Not Found")
-// =============================
-
-// Home page
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// Login page
-app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'login.html'));
-});
-
-// Register page
-app.get('/register', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'register.html'));
-});
-
-// Profile page
-app.get('/profile', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'profile.html'));
-});
-
-// Fallback — prevents "Not Found"
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// =============================
 // API ROUTES
 // =============================
 app.use('/api/auth', authRoutes);
@@ -96,14 +67,38 @@ app.use('/api/delete-history', deleteHistoryRoutes);
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 
 // =============================
+// FRONTEND ROUTES (Render Fix)
+// =============================
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
+
+app.get('/register', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'register.html'));
+});
+
+app.get('/profile', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'profile.html'));
+});
+
+// Fallback for SPA routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// =============================
 // START SERVER
 // =============================
 const PORT = process.env.PORT || 3000;
 
 initDB()
   .then(() => {
-    app.listen(PORT, () => {
-      console.log(`🚀 ChatBuddy running on http://localhost:${PORT}`);
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`🚀 ChatBuddy running on port ${PORT}`);
     });
   })
   .catch(err => {
