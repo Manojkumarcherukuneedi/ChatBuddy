@@ -264,3 +264,37 @@ function saveSettings() {
 
   alert("Settings saved!");
 }
+
+async function changePassword() {
+  const oldPass = document.getElementById("oldPass").value.trim();
+  const newPass = document.getElementById("newPass").value.trim();
+
+  if (!oldPass || !newPass) {
+    alert("Please enter both old and new passwords.");
+    return;
+  }
+
+  try {
+    const res = await fetch("/api/change-password", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + TOKEN
+      },
+      body: JSON.stringify({ oldPass, newPass })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      alert("Password changed successfully!");
+      document.getElementById("oldPass").value = "";
+      document.getElementById("newPass").value = "";
+    } else {
+      alert(data.message || "Password change failed.");
+    }
+
+  } catch {
+    alert("Server error. Please try again later.");
+  }
+}

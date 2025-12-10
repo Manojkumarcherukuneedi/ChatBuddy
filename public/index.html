@@ -302,20 +302,39 @@ button {
 <div id="privacyPage" class="page">
   <h2>Privacy & Security</h2>
 
+  <!-- Your Data Section -->
   <div class="section">
     <h3>Your Data</h3>
     <p>• Chat history is private and secure.</p>
     <p>• You can delete history anytime.</p>
   </div>
 
+  <!-- Security Section -->
   <div class="section">
     <h3>Security</h3>
     <p>• Passwords are encrypted.</p>
     <p>• Authentication uses secure tokens.</p>
   </div>
 
-  <button onclick="closePages()">Back</button>
+  <!-- ⭐ NEW: CHANGE PASSWORD SECTION ⭐ -->
+  <div class="section">
+    <h3>Change Password</h3>
+
+    <input type="password" id="oldPass" placeholder="Old Password" class="input-box">
+    <input type="password" id="newPass" placeholder="New Password" class="input-box">
+
+    <button class="btn-primary" onclick="changePassword()">Change Password</button>
+  </div>
+
+  <!-- ⭐ NEW: MANAGE CHATS SECTION ⭐ -->
+  <div class="section">
+    <h3>Manage Chats</h3>
+    <button class="btn-danger" onclick="deleteHistory()">Delete All Chats</button>
+  </div>
+
+  <button onclick="closePages()" class="btn-back">Back to Home</button>
 </div>
+
 
 <!-- NOTIFICATIONS PAGE -->
 <div id="notificationsPage" class="page">
