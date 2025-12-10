@@ -1,9 +1,9 @@
 // ======================================================================
-// BASE API URL (AUTO-DETECT: Localhost or Render)
+// BASE API URL (AUTO-DETECT: Localhost OR Render Production)
 // ======================================================================
 const API_BASE =
   window.location.hostname === "localhost"
-    ? ""
+    ? "http://localhost:3000"
     : "https://chatbuddy-l38k.onrender.com";
 
 // ======================================================================
@@ -27,7 +27,7 @@ if (localStorage.getItem("darkMode") === "true") {
 }
 
 // ======================================================================
-// ADD MESSAGE TO CHAT UI
+// ADD MESSAGE TO UI
 // ======================================================================
 function addMessage(text, type) {
   if (!text) return;
@@ -43,7 +43,7 @@ function addMessage(text, type) {
 }
 
 // ======================================================================
-// SEND MESSAGE
+// SEND CHAT MESSAGE
 // ======================================================================
 async function sendMsg() {
   const input = document.getElementById("msgInput");
@@ -64,13 +64,13 @@ async function sendMsg() {
     });
 
     const data = await res.json();
-    addMessage(data.reply, "bot");
-  } catch {
+    addMessage(data.reply || "⚠️ AI did not respond.", "bot");
+  } catch (err) {
     addMessage("⚠️ Error contacting server", "bot");
   }
 }
 
-// ENTER TO SEND
+// ENTER KEY = SEND
 document.getElementById("msgInput").addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
@@ -89,7 +89,7 @@ async function motivate() {
 
     const data = await res.json();
     addMessage(data.message, "bot");
-  } catch {
+  } catch (err) {
     addMessage("🔥 Couldn't fetch motivation right now 😅", "bot");
   }
 }
@@ -112,6 +112,7 @@ async function loadHistory() {
       return;
     }
 
+    // Fix SQLite timestamp into readable format
     let first = history[0];
     let fixedDate = new Date(first.created_at.replace(" ", "T") + "Z");
 
@@ -170,7 +171,9 @@ function openAccount() {
     .then((res) => res.json())
     .then((data) => {
       document.getElementById("accName").textContent = data.name || "Unknown";
+
       let fixedDate = new Date(data.created.replace(" ", "T") + "Z");
+
       document.getElementById("accCreated").textContent =
         fixedDate.toLocaleDateString("en-US", {
           year: "numeric",
