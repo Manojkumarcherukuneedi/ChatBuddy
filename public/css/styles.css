@@ -395,3 +395,16 @@ input:checked + .slider:before {
 .font-medium { font-size: 17px !important; }
 .font-large { font-size: 20px !important; }
 
+/* FORCE GRADIENT BACKGROUND FOR ALL MENU PAGES */
+.page {
+  background: linear-gradient(135deg, #26D0CE, #1A2980) !important;
+  color: white !important;
+  min-height: 100vh !important;
+}
+
+/* FIX PADDING SO PAGE IS FULL SCREEN */
+body, html {
+  height: 100%;
+  background: none !important;
+}
+
