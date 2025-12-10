@@ -223,7 +223,6 @@ button {
 /* =========================================
    PAGES (SETTINGS, PRIVACY, NOTIFICATIONS, ABOUT)
 ========================================= */
-
 .page {
   position: absolute;
   top: 0;
@@ -266,20 +265,21 @@ button {
   <div class="close-btn" onclick="closeMenu()">✕</div>
 
   <ul class="menu-list">
-    <li onclick="goHome(); closeMenu();">Home</li>
-    <li onclick="openSettings(); closeMenu();">Settings</li>
-    <li onclick="openPrivacy(); closeMenu();">Privacy & Security</li>
-    <li onclick="openNotifications(); closeMenu();">Notifications</li>
-    <li onclick="openAbout(); closeMenu();">About</li>
-    <li class="logout-item" onclick="logout(); closeMenu();">Logout</li>
+    <li onclick="goHome()">Home</li>
+    <li onclick="openSettings()">Settings</li>
+    <li onclick="openPrivacy()">Privacy & Security</li>
+    <li onclick="openNotifications()">Notifications</li>
+    <li onclick="openAbout()">About</li>
+    <li class="logout-item" onclick="logout()">Logout</li>
   </ul>
 </div>
 
 <!-- OVERLAY -->
 <div id="overlay" class="overlay" onclick="closeMenu()"></div>
 
+
 <!-- CHAT UI -->
-<div class="chat-container">
+<div class="chat-container" id="chatContainer">
   <h1 onclick="goHome()">ChatBuddy</h1>
   <div class="toggle-dark" onclick="toggleDark()">🌙 Toggle Dark Mode</div>
 
@@ -291,6 +291,7 @@ button {
   <button onclick="loadHistory()">Load History</button>
   <button class="danger-btn" onclick="deleteHistory()">Delete History</button>
 </div>
+
 
 <!-- SETTINGS PAGE -->
 <div id="settingsPage" class="page">
@@ -316,40 +317,46 @@ button {
   <button onclick="closePages()">Back</button>
 </div>
 
+
+<!-- CHAT SCRIPT -->
 <script src="/js/chat.js"></script>
 
 <script>
-/* ACCOUNT TOGGLE */
+/* ACCOUNT DROPDOWN */
 document.getElementById("account-btn").onclick = () => {
   document.getElementById("account-dropdown").classList.toggle("show");
 };
 
-/* LOAD ACCOUNT INFO */
+/* LOAD PROFILE INFO */
 fetch("/api/profile")
   .then(res => res.json())
   .then(data => {
     document.getElementById("acc-username").textContent = data.username;
     document.getElementById("acc-created").textContent =
       new Date(data.created_at).toDateString();
-  })
-  .catch(() => {
-    document.getElementById("acc-username").textContent = "Error";
-    document.getElementById("acc-created").textContent = "Error";
   });
 
-/* PAGE CONTROLS */
+
+/* PAGE SWITCHING */
 function showPage(id) {
-  document.querySelector(".chat-container").style.display = "none";
+  closeMenu();
+  document.getElementById("chatContainer").style.display = "none";
   document.querySelectorAll(".page").forEach(p => p.style.display = "none");
   document.getElementById(id).style.display = "block";
 }
 
 function closePages() {
-  document.querySelector(".chat-container").style.display = "block";
+  document.getElementById("chatContainer").style.display = "block";
   document.querySelectorAll(".page").forEach(p => p.style.display = "none");
 }
 
-/* SIDEBAR */
+function openSettings() { showPage("settingsPage"); }
+function openPrivacy() { showPage("privacyPage"); }
+function openNotifications() { showPage("notificationsPage"); }
+function openAbout() { showPage("aboutPage"); }
+
+
+/* SIDEBAR CONTROLS */
 function openMenu() {
   document.getElementById("sideMenu").style.left = "0px";
   document.getElementById("overlay").style.display = "block";

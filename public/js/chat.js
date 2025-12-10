@@ -31,9 +31,7 @@ function addMessage(text, type) {
   msg.textContent = text;
 
   box.appendChild(msg);
-
-  // Auto-scroll DOWN only when adding real-time messages
-  box.scrollTop = box.scrollHeight;
+  box.scrollTop = box.scrollHeight; // auto-scroll DOWN for live chat
 }
 
 // ======================================================================
@@ -64,7 +62,7 @@ async function sendMsg() {
   }
 }
 
-// ENTER TO SEND
+// ENTER to send
 document.getElementById("msgInput").addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
@@ -89,7 +87,7 @@ async function motivate() {
 }
 
 // ======================================================================
-// LOAD HISTORY  (Auto-scrolls to TOP)
+// LOAD HISTORY (Auto-scrolls to TOP)
 // ======================================================================
 async function loadHistory() {
   try {
@@ -115,25 +113,24 @@ async function loadHistory() {
     header.textContent = "🗓️ " + fixedDate.toLocaleString("en-US");
     box.appendChild(header);
 
-    // Load messages in order WITHOUT forcing scroll down
+    // Append all messages (no auto-scroll override)
     history.forEach((h) => {
       if (h.user_text) {
-        const div = document.createElement("div");
-        div.className = "msg-user fade-in";
-        div.textContent = h.user_text;
-        box.appendChild(div);
+        const u = document.createElement("div");
+        u.className = "msg-user fade-in";
+        u.textContent = h.user_text;
+        box.appendChild(u);
       }
       if (h.bot_text) {
-        const div = document.createElement("div");
-        div.className = "msg-bot fade-in";
-        div.textContent = h.bot_text;
-        box.appendChild(div);
+        const b = document.createElement("div");
+        b.className = "msg-bot fade-in";
+        b.textContent = h.bot_text;
+        box.appendChild(b);
       }
     });
 
-    // ⭐ Scroll to TOP automatically
+    // Auto-scroll to TOP
     box.scrollTop = 0;
-
   } catch {
     addMessage("⚠️ Couldn't load history right now.", "bot");
   }
@@ -167,7 +164,7 @@ async function deleteHistory() {
 }
 
 // ======================================================================
-// ACCOUNT PAGE
+// ACCOUNT SECTION
 // ======================================================================
 function openAccount() {
   closeMenu();
@@ -203,12 +200,12 @@ function closeAccount() {
 }
 
 // ======================================================================
-// MENU & NAVIGATION
+// NAVIGATION (MENU PAGES)
 // ======================================================================
 function showPage(id) {
   closeMenu();
-  document.querySelectorAll(".page").forEach((p) => (p.style.display = "none"));
   document.getElementById("chatContainer").style.display = "none";
+  document.querySelectorAll(".page").forEach((p) => (p.style.display = "none"));
   document.getElementById(id).style.display = "block";
 }
 
@@ -220,12 +217,32 @@ function closePages() {
 function goHome() {
   closePages();
   closeMenu();
-
-  const box = document.getElementById("chatBox");
-  box.innerHTML = "";
+  document.getElementById("chatBox").innerHTML = "";
   addMessage("Welcome back! 👋 Start chatting again!", "bot");
 }
 
+// ======================================================================
+// SIDEBAR MENU FUNCTIONS (Missing earlier!)
+// ======================================================================
+function openSettings() {
+  showPage("settingsPage");
+}
+
+function openPrivacy() {
+  showPage("privacyPage");
+}
+
+function openNotifications() {
+  showPage("notificationsPage");
+}
+
+function openAbout() {
+  showPage("aboutPage");
+}
+
+// ======================================================================
+// SIDEBAR OPEN/CLOSE
+// ======================================================================
 function openMenu() {
   document.getElementById("sideMenu").style.left = "0px";
   document.getElementById("overlay").style.display = "block";
