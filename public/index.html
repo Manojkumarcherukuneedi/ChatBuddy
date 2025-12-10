@@ -61,12 +61,6 @@ body.dark {
   cursor: pointer;
 }
 
-.menu-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
 .menu-list li {
   padding: 20px;
   font-size: 18px;
@@ -97,7 +91,6 @@ body.dark {
 /* =========================================
    ACCOUNT DROPDOWN
 ========================================= */
-
 #account-btn {
   position: absolute;
   top: 25px;
@@ -143,20 +136,6 @@ body.dark {
   text-align: center;
 }
 
-h1 {
-  margin: 0;
-  margin-bottom: 10px;
-  font-size: 40px;
-  color: white;
-  cursor: pointer;
-}
-
-.toggle-dark {
-  font-size: 14px;
-  cursor: pointer;
-  margin-bottom: 12px;
-}
-
 .chat-box {
   width: 100%;
   height: 260px;
@@ -167,29 +146,8 @@ h1 {
   margin-bottom: 15px;
 }
 
-input {
-  width: 90%;
-  padding: 12px;
-  margin-bottom: 12px;
-  border-radius: 12px;
-  border: 2px solid black;
-  font-size: 16px;
-}
-
-button {
-  width: 90%;
-  padding: 12px;
-  margin-bottom: 10px;
-  border: 2px solid black;
-  border-radius: 12px;
-  background: white;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 17px;
-}
-
 /* =========================================
-   PAGE SECTIONS (NEW)
+   PAGE SECTIONS
 ========================================= */
 .page {
   position: absolute;
@@ -206,27 +164,43 @@ button {
 
 .page h2 {
   text-align: center;
-  margin-top: 15px;
   margin-bottom: 20px;
 }
 
-.section {
-  background: rgba(255,255,255,0.4);
-  padding: 15px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  font-size: 16px;
-  color: black;
+/* Toggle switch CSS for Notifications */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
 }
-
-.section h3 {
-  margin-top: 0;
-  font-size: 18px;
+.switch input { display:none; }
+.slider {
+  position: absolute;
+  cursor: pointer;
+  background-color: #ccc;
+  border-radius: 26px;
+  top: 0; left: 0; right: 0; bottom: 0;
+  transition: .4s;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px; width: 20px;
+  left: 3px; bottom: 3px;
+  background:#fff;
+  transition: .4s;
+  border-radius: 50%;
+}
+input:checked + .slider {
+  background-color: #21c4d3;
+}
+input:checked + .slider:before {
+  transform: translateX(24px);
 }
 </style>
 
 </head>
-
 <body>
 
 <!-- MENU BUTTON -->
@@ -237,7 +211,6 @@ button {
   <img src="https://cdn-icons-png.flaticon.com/512/456/456212.png" />
 </div>
 
-<!-- ACCOUNT DROPDOWN -->
 <div id="account-dropdown">
   <p><strong>Username:</strong> <span id="acc-username">Loading...</span></p>
   <p><strong>Member since:</strong> <span id="acc-created">Loading...</span></p>
@@ -257,7 +230,6 @@ button {
   </ul>
 </div>
 
-<!-- OVERLAY -->
 <div id="overlay" class="overlay" onclick="closeMenu()"></div>
 
 <!-- CHAT UI -->
@@ -274,82 +246,97 @@ button {
   <button class="danger-btn" onclick="deleteHistory()">Delete History</button>
 </div>
 
+
+<!-- ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐ -->
+<!--        ✅ REPLACED SECTIONS BELOW    -->
+<!-- ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐ -->
+
 <!-- SETTINGS PAGE -->
 <div id="settingsPage" class="page">
-  <h2>Settings</h2>
+  <h2>Chat Preferences</h2>
 
-  <div class="section">
-    <h3>Appearance</h3>
-    <p>• Toggle dark mode</p>
-    <p>• Customize chat bubbles (coming soon)</p>
+  <div style="background:#fff; padding:15px; border-radius:12px; margin-bottom:20px;">
+    <h3>Font Size</h3>
+    <label><input type="radio" name="fontSize" value="small"> Small</label><br>
+    <label><input type="radio" name="fontSize" value="medium" checked> Medium</label><br>
+    <label><input type="radio" name="fontSize" value="large"> Large</label>
   </div>
 
-  <div class="section">
-    <h3>Account</h3>
-    <p>• Change username (coming soon)</p>
-    <p>• Delete account (coming soon)</p>
+  <div style="background:#fff; padding:15px; border-radius:12px;">
+    <h3>Theme Colors</h3>
+    <label><input type="radio" name="theme" value="light"> Light</label><br>
+    <label><input type="radio" name="theme" value="dark" checked> Dark</label><br>
+    <label><input type="radio" name="theme" value="colorful"> Colorful</label>
   </div>
 
-  <button onclick="closePages()">Back</button>
+  <button style="margin-top:25px;">Save</button>
+  <button onclick="closePages()" style="margin-top:10px;">Back</button>
 </div>
+
 
 <!-- PRIVACY PAGE -->
 <div id="privacyPage" class="page">
   <h2>Privacy & Security</h2>
 
-  <div class="section">
-    <h3>Your Data</h3>
-    <p>• Chat history is private and secure.</p>
-    <p>• You can delete history anytime.</p>
-  </div>
+  <h3>Change Password</h3>
+  <input placeholder="Old Password" type="password" style="width:100%; margin-bottom:10px;">
+  <input placeholder="New Password" type="password" style="width:100%; margin-bottom:10px;">
 
-  <div class="section">
-    <h3>Security</h3>
-    <p>• Passwords are encrypted.</p>
-    <p>• Authentication uses secure tokens.</p>
-  </div>
+  <button style="background:#008c9e; color:white;">Change Password</button>
 
-  <button onclick="closePages()">Back</button>
+  <h3 style="margin-top:25px;">Manage Chats</h3>
+  <button style="background:#ff3b3b; color:white;">Delete All Chats</button>
+
+  <button onclick="closePages()" style="margin-top:20px;">Back to Home</button>
 </div>
+
 
 <!-- NOTIFICATIONS PAGE -->
 <div id="notificationsPage" class="page">
   <h2>Notifications</h2>
 
-  <div class="section">
-    <h3>Chat Alerts</h3>
-    <p>• Receive updates inside ChatBuddy.</p>
-    <p>• Push notifications coming soon.</p>
+  <div style="background:#fff; padding:15px; border-radius:12px;">
+    <label style="font-size:18px;">
+      Enable/Disable Notifications
+    </label>
+
+    <label class="switch" style="float:right;">
+      <input type="checkbox" checked>
+      <span class="slider"></span>
+    </label>
   </div>
 
-  <div class="section">
-    <h3>Reminders</h3>
-    <p>• Daily motivational reminders (coming soon)</p>
-  </div>
-
-  <button onclick="closePages()">Back</button>
+  <button onclick="closePages()" style="margin-top:30px;">Back</button>
 </div>
+
 
 <!-- ABOUT PAGE -->
 <div id="aboutPage" class="page">
   <h2>About ChatBuddy</h2>
 
-  <div class="section">
-    <h3>What is ChatBuddy?</h3>
-    <p>ChatBuddy is your friendly AI companion designed to help you feel supported and motivated.</p>
-  </div>
+  <p><strong>Welcome to Chat Buddy!</strong><br>
+  Your friendly digital companion designed to brighten your day, share positive vibes, and make conversations fun and engaging.</p>
 
-  <div class="section">
-    <h3>Features</h3>
-    <p>• Friendly conversations</p>
-    <p>• Motivational messages</p>
-    <p>• Saved chat history</p>
-  </div>
+  <p><strong>What Chat Buddy Offers:</strong><br>
+  • Cheerful & supportive chats<br>
+  • Fun, playful interactions<br>
+  • Motivational energy<br>
+  • Relaxing & calming vibes</p>
 
-  <div class="section">
-    <h3>Version</h3>
-    <p>ChatBuddy v1.0.0</p>
-  </div>
+  <p><strong>Why Chat Buddy?</strong><br>
+  Sometimes all we need is someone who listens, encourages, and spreads positivity. Chat Buddy is always here for you!</p>
+
+  <p><strong>Our Mission:</strong><br>
+  To make technology feel like a friend, not just a tool.</p>
+
+  <p><strong>Developed By:</strong><br>
+  Ashwin Kumar Mandaloju<br>
+  Manoj Kumar Cherukuneedi<br>
+  Hemanth Cheeruka<br>
+  Meet Saspaar<br>
+  University of North Texas</p>
+
+  <p style="text-align:center; margin-top:30px;">Version: 1.0.0</p>
 
   <button onclick="closePages()">Back</button>
 </div>
@@ -357,12 +344,9 @@ button {
 <script src="/js/chat.js"></script>
 
 <script>
-// ACCOUNT DROPDOWN
-document.getElementById("account-btn").onclick = () => {
+document.getElementById("account-btn").onclick = () =>
   document.getElementById("account-dropdown").classList.toggle("show");
-};
 
-// LOAD PROFILE
 fetch("/api/profile")
   .then(res => res.json())
   .then(data => {
@@ -371,7 +355,6 @@ fetch("/api/profile")
       new Date(data.created_at).toDateString();
   });
 
-// PAGE SWITCHING
 function showPage(id) {
   closeMenu();
   document.getElementById("chatContainer").style.display = "none";
@@ -384,13 +367,11 @@ function closePages() {
   document.querySelectorAll(".page").forEach(p => p.style.display = "none");
 }
 
-// OPEN PAGE FUNCTIONS
 function openSettings() { showPage("settingsPage"); }
 function openPrivacy() { showPage("privacyPage"); }
 function openNotifications() { showPage("notificationsPage"); }
 function openAbout() { showPage("aboutPage"); }
 
-// SIDEBAR CONTROLS
 function openMenu() {
   document.getElementById("sideMenu").style.left = "0px";
   document.getElementById("overlay").style.display = "block";
