@@ -1,4 +1,12 @@
 // ======================================================================
+// BASE API URL (AUTO-DETECT: Localhost or Render)
+// ======================================================================
+const API_BASE =
+  window.location.hostname === "localhost"
+    ? ""
+    : "https://chatbuddy-l38k.onrender.com";
+
+// ======================================================================
 // LOGOUT
 // ======================================================================
 function logout() {
@@ -46,13 +54,13 @@ async function sendMsg() {
   input.value = "";
 
   try {
-    const res = await fetch("/api/chat", {
+    const res = await fetch(`${API_BASE}/api/chat`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer " + localStorage.getItem("token")
+        Authorization: "Bearer " + localStorage.getItem("token"),
       },
-      body: JSON.stringify({ message: msg })
+      body: JSON.stringify({ message: msg }),
     });
 
     const data = await res.json();
@@ -62,7 +70,7 @@ async function sendMsg() {
   }
 }
 
-// ENTER key to send
+// ENTER TO SEND
 document.getElementById("msgInput").addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
@@ -75,15 +83,12 @@ document.getElementById("msgInput").addEventListener("keydown", (e) => {
 // ======================================================================
 async function motivate() {
   try {
-    const res = await fetch("/api/messages/motivate", {
-      headers: {
-        "Authorization": "Bearer " + localStorage.getItem("token")
-      }
+    const res = await fetch(`${API_BASE}/api/messages/motivate`, {
+      headers: { Authorization: "Bearer " + localStorage.getItem("token") },
     });
 
     const data = await res.json();
     addMessage(data.message, "bot");
-
   } catch {
     addMessage("🔥 Couldn't fetch motivation right now 😅", "bot");
   }
@@ -94,8 +99,8 @@ async function motivate() {
 // ======================================================================
 async function loadHistory() {
   try {
-    const res = await fetch("/api/history", {
-      headers: { "Authorization": "Bearer " + localStorage.getItem("token") }
+    const res = await fetch(`${API_BASE}/api/history`, {
+      headers: { Authorization: "Bearer " + localStorage.getItem("token") },
     });
 
     const history = await res.json();
@@ -107,7 +112,6 @@ async function loadHistory() {
       return;
     }
 
-    // Fix SQLite timestamp → Proper ISO date
     let first = history[0];
     let fixedDate = new Date(first.created_at.replace(" ", "T") + "Z");
 
@@ -116,12 +120,10 @@ async function loadHistory() {
     header.textContent = "🗓️ " + fixedDate.toLocaleString("en-US");
     box.appendChild(header);
 
-    // Now add all messages
-    history.forEach(h => {
+    history.forEach((h) => {
       if (h.user_text) addMessage(h.user_text, "user");
       if (h.bot_text) addMessage(h.bot_text, "bot");
     });
-
   } catch {
     addMessage("⚠️ Couldn't load history right now", "bot");
   }
@@ -134,9 +136,9 @@ async function deleteHistory() {
   if (!confirm("Delete ALL chat history?")) return;
 
   try {
-    const res = await fetch("/api/delete-history", {
+    const res = await fetch(`${API_BASE}/api/delete-history`, {
       method: "DELETE",
-      headers: { "Authorization": "Bearer " + localStorage.getItem("token") }
+      headers: { Authorization: "Bearer " + localStorage.getItem("token") },
     });
 
     const data = await res.json();
@@ -147,83 +149,33 @@ async function deleteHistory() {
     } else {
       addMessage("❌ Failed to delete history", "bot");
     }
-
   } catch {
     addMessage("❌ Error deleting history", "bot");
   }
 }
 
 // ======================================================================
-// PAGE NAVIGATION (Settings / Privacy / Notifications / About)
-// ======================================================================
-function showPage(id) {
-  closeMenu();
-  document.getElementById("chatContainer").style.display = "none";
-
-  document.querySelectorAll(".page").forEach(p => p.style.display = "none");
-  document.getElementById(id).style.display = "block";
-}
-
-function closePages() {
-  document.querySelectorAll(".page").forEach(p => p.style.display = "none");
-  document.getElementById("chatContainer").style.display = "block";
-}
-
-function openSettings() { showPage("settingsPage"); }
-function openPrivacy() { showPage("privacyPage"); }
-function openNotifications() { showPage("notificationsPage"); }
-function openAbout() { showPage("aboutPage"); }
-
-// ======================================================================
-// HOME RESET
-// ======================================================================
-function goHome() {
-  closePages();
-  closeMenu();
-
-  const box = document.getElementById("chatBox");
-  box.innerHTML = "";
-  addMessage("Welcome back! 👋 Start chatting again!", "bot");
-}
-
-// ======================================================================
-// SIDE MENU
-// ======================================================================
-function openMenu() {
-  document.getElementById("sideMenu").style.left = "0px";
-  document.getElementById("overlay").style.display = "block";
-}
-
-function closeMenu() {
-  document.getElementById("sideMenu").style.left = "-260px";
-  document.getElementById("overlay").style.display = "none";
-}
-
-// ======================================================================
-// ACCOUNT PAGE (FINAL FIXED VERSION)
+// ACCOUNT PAGE
 // ======================================================================
 function openAccount() {
   closeMenu();
-  closePages(); // hide any open setting page
+  closePages();
 
   document.getElementById("chatContainer").style.display = "none";
   document.getElementById("accountSection").style.display = "block";
 
-  fetch("/api/profile", {
-    headers: { "Authorization": "Bearer " + localStorage.getItem("token") }
+  fetch(`${API_BASE}/api/profile`, {
+    headers: { Authorization: "Bearer " + localStorage.getItem("token") },
   })
-    .then(res => res.json())
-    .then(data => {
+    .then((res) => res.json())
+    .then((data) => {
       document.getElementById("accName").textContent = data.name || "Unknown";
-
-      // Convert SQLite timestamp → valid ISO → readable date
       let fixedDate = new Date(data.created.replace(" ", "T") + "Z");
-
       document.getElementById("accCreated").textContent =
         fixedDate.toLocaleDateString("en-US", {
           year: "numeric",
           month: "long",
-          day: "numeric"
+          day: "numeric",
         });
     })
     .catch(() => {
@@ -237,3 +189,36 @@ function closeAccount() {
   document.getElementById("chatContainer").style.display = "block";
 }
 
+// ======================================================================
+// PAGE NAVIGATION / MENU
+// ======================================================================
+function showPage(id) {
+  closeMenu();
+  document.getElementById("chatContainer").style.display = "none";
+
+  document.querySelectorAll(".page").forEach((p) => (p.style.display = "none"));
+  document.getElementById(id).style.display = "block";
+}
+
+function closePages() {
+  document.querySelectorAll(".page").forEach((p) => (p.style.display = "none"));
+  document.getElementById("chatContainer").style.display = "block";
+}
+
+function goHome() {
+  closePages();
+  closeMenu();
+  const box = document.getElementById("chatBox");
+  box.innerHTML = "";
+  addMessage("Welcome back! 👋 Start chatting again!", "bot");
+}
+
+function openMenu() {
+  document.getElementById("sideMenu").style.left = "0px";
+  document.getElementById("overlay").style.display = "block";
+}
+
+function closeMenu() {
+  document.getElementById("sideMenu").style.left = "-260px";
+  document.getElementById("overlay").style.display = "none";
+}
