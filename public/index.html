@@ -95,7 +95,7 @@ body.dark {
 }
 
 /* =========================================
-   ACCOUNT BUTTON
+   ACCOUNT DROPDOWN
 ========================================= */
 
 #account-btn {
@@ -113,7 +113,6 @@ body.dark {
   border: 2px solid white;
 }
 
-/* ACCOUNT DROPDOWN */
 #account-dropdown {
   position: absolute;
   top: 80px;
@@ -129,12 +128,6 @@ body.dark {
 
 #account-dropdown.show {
   display: block;
-}
-
-#account-dropdown p {
-  margin: 5px 0;
-  font-size: 15px;
-  color: #222;
 }
 
 /* =========================================
@@ -195,33 +188,8 @@ button {
   font-size: 17px;
 }
 
-.danger-btn {
-  background: #ff4b4b !important;
-  color: white;
-  border: none;
-}
-
-/* Messages */
-.msg-user {
-  background: rgba(255,255,255,0.85);
-  padding: 8px 12px;
-  border-radius: 10px;
-  margin-left: auto;
-  max-width: 80%;
-  margin-bottom: 6px;
-}
-
-.msg-bot {
-  background: rgba(0,0,0,0.25);
-  padding: 8px 12px;
-  border-radius: 10px;
-  max-width: 80%;
-  margin-bottom: 6px;
-  color: white;
-}
-
 /* =========================================
-   PAGES (SETTINGS, PRIVACY, NOTIFICATIONS, ABOUT)
+   PAGE SECTIONS (NEW)
 ========================================= */
 .page {
   position: absolute;
@@ -229,8 +197,8 @@ button {
   left: 0;
   width: 420px;
   height: 100%;
-  background: linear-gradient(90deg, #1C9DBD, #6AD3F6);
-  padding: 25px;
+  background: linear-gradient(135deg, #1C9DBD, #6AD3F6);
+  padding: 20px;
   display: none;
   overflow-y: auto;
   border-radius: 18px;
@@ -238,7 +206,22 @@ button {
 
 .page h2 {
   text-align: center;
+  margin-top: 15px;
   margin-bottom: 20px;
+}
+
+.section {
+  background: rgba(255,255,255,0.4);
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: black;
+}
+
+.section h3 {
+  margin-top: 0;
+  font-size: 18px;
 }
 </style>
 
@@ -277,7 +260,6 @@ button {
 <!-- OVERLAY -->
 <div id="overlay" class="overlay" onclick="closeMenu()"></div>
 
-
 <!-- CHAT UI -->
 <div class="chat-container" id="chatContainer">
   <h1 onclick="goHome()">ChatBuddy</h1>
@@ -292,42 +274,95 @@ button {
   <button class="danger-btn" onclick="deleteHistory()">Delete History</button>
 </div>
 
-
 <!-- SETTINGS PAGE -->
 <div id="settingsPage" class="page">
   <h2>Settings</h2>
+
+  <div class="section">
+    <h3>Appearance</h3>
+    <p>• Toggle dark mode</p>
+    <p>• Customize chat bubbles (coming soon)</p>
+  </div>
+
+  <div class="section">
+    <h3>Account</h3>
+    <p>• Change username (coming soon)</p>
+    <p>• Delete account (coming soon)</p>
+  </div>
+
   <button onclick="closePages()">Back</button>
 </div>
 
 <!-- PRIVACY PAGE -->
 <div id="privacyPage" class="page">
   <h2>Privacy & Security</h2>
+
+  <div class="section">
+    <h3>Your Data</h3>
+    <p>• Chat history is private and secure.</p>
+    <p>• You can delete history anytime.</p>
+  </div>
+
+  <div class="section">
+    <h3>Security</h3>
+    <p>• Passwords are encrypted.</p>
+    <p>• Authentication uses secure tokens.</p>
+  </div>
+
   <button onclick="closePages()">Back</button>
 </div>
 
 <!-- NOTIFICATIONS PAGE -->
 <div id="notificationsPage" class="page">
   <h2>Notifications</h2>
+
+  <div class="section">
+    <h3>Chat Alerts</h3>
+    <p>• Receive updates inside ChatBuddy.</p>
+    <p>• Push notifications coming soon.</p>
+  </div>
+
+  <div class="section">
+    <h3>Reminders</h3>
+    <p>• Daily motivational reminders (coming soon)</p>
+  </div>
+
   <button onclick="closePages()">Back</button>
 </div>
 
 <!-- ABOUT PAGE -->
 <div id="aboutPage" class="page">
   <h2>About ChatBuddy</h2>
+
+  <div class="section">
+    <h3>What is ChatBuddy?</h3>
+    <p>ChatBuddy is your friendly AI companion designed to help you feel supported and motivated.</p>
+  </div>
+
+  <div class="section">
+    <h3>Features</h3>
+    <p>• Friendly conversations</p>
+    <p>• Motivational messages</p>
+    <p>• Saved chat history</p>
+  </div>
+
+  <div class="section">
+    <h3>Version</h3>
+    <p>ChatBuddy v1.0.0</p>
+  </div>
+
   <button onclick="closePages()">Back</button>
 </div>
 
-
-<!-- CHAT SCRIPT -->
 <script src="/js/chat.js"></script>
 
 <script>
-/* ACCOUNT DROPDOWN */
+// ACCOUNT DROPDOWN
 document.getElementById("account-btn").onclick = () => {
   document.getElementById("account-dropdown").classList.toggle("show");
 };
 
-/* LOAD PROFILE INFO */
+// LOAD PROFILE
 fetch("/api/profile")
   .then(res => res.json())
   .then(data => {
@@ -336,8 +371,7 @@ fetch("/api/profile")
       new Date(data.created_at).toDateString();
   });
 
-
-/* PAGE SWITCHING */
+// PAGE SWITCHING
 function showPage(id) {
   closeMenu();
   document.getElementById("chatContainer").style.display = "none";
@@ -350,13 +384,13 @@ function closePages() {
   document.querySelectorAll(".page").forEach(p => p.style.display = "none");
 }
 
+// OPEN PAGE FUNCTIONS
 function openSettings() { showPage("settingsPage"); }
 function openPrivacy() { showPage("privacyPage"); }
 function openNotifications() { showPage("notificationsPage"); }
 function openAbout() { showPage("aboutPage"); }
 
-
-/* SIDEBAR CONTROLS */
+// SIDEBAR CONTROLS
 function openMenu() {
   document.getElementById("sideMenu").style.left = "0px";
   document.getElementById("overlay").style.display = "block";
