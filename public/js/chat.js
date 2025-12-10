@@ -298,3 +298,39 @@ async function changePassword() {
     alert("Server error. Please try again later.");
   }
 }
+/* ======================================================================
+   NOTIFICATION TOGGLE SETTINGS
+====================================================================== */
+
+// Apply saved notification toggle state
+function applyNotificationSetting() {
+  const toggle = document.getElementById("notifToggle");
+  if (!toggle) return; // Page not visible yet
+
+  const enabled = localStorage.getItem("notificationsEnabled") === "true";
+  toggle.checked = enabled;
+}
+
+// Save toggle changes
+function setupNotificationToggle() {
+  const toggle = document.getElementById("notifToggle");
+  if (!toggle) return;
+
+  toggle.addEventListener("change", () => {
+    const enabled = toggle.checked;
+    localStorage.setItem("notificationsEnabled", enabled);
+  });
+}
+
+// Ensure it loads every time the notifications page opens
+function openNotifications() {
+  showPage("notificationsPage");
+  applyNotificationSetting();
+  setupNotificationToggle();
+}
+
+// ALSO apply setting on full page load
+document.addEventListener("DOMContentLoaded", () => {
+  applyNotificationSetting();
+  setupNotificationToggle();
+});

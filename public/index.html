@@ -321,24 +321,25 @@ button {
   <button onclick="closePages()" class="btn-back">Back to Home</button>
 </div>
 
-
 <!-- NOTIFICATIONS PAGE -->
 <div id="notificationsPage" class="page">
   <h2>Notifications</h2>
 
-  <div class="section">
-    <h3>Chat Alerts</h3>
-    <p>• Receive updates inside ChatBuddy.</p>
-    <p>• Push notifications coming soon.</p>
-  </div>
+  <!-- Notification Toggle -->
+  <div class="section" style="display:flex; justify-content:space-between; align-items:center;">
+    <div>
+      <strong>Enable/Disable Notifications</strong>
+    </div>
 
-  <div class="section">
-    <h3>Reminders</h3>
-    <p>• Daily motivational reminders (coming soon)</p>
+    <label class="switch">
+      <input type="checkbox" id="notifToggle">
+      <span class="slider"></span>
+    </label>
   </div>
 
   <button onclick="closePages()">Back</button>
 </div>
+
 
 <!-- ABOUT PAGE -->
 <div id="aboutPage" class="page">
