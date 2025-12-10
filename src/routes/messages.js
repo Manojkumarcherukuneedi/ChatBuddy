@@ -14,7 +14,7 @@ router.get("/motivate", authRequired, async (req, res) => {
 
   try {
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash"
+      model: "gemini-1.5-flash-latest"   // ✅ FIXED
     });
 
     const prompt = `
@@ -24,10 +24,8 @@ Be uplifting and positive.
 `;
 
     const result = await model.generateContent(prompt);
-
     const botText = result?.response?.text() || "Keep going — you got this! 💪";
 
-    // Save message in DB
     await run(
       db,
       `INSERT INTO history (user_id, user_text, bot_text)
