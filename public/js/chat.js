@@ -1,13 +1,9 @@
 // ======================================================================
-// NO API_BASE — Render and Localhost both use relative routes
+// REQUIRE LOGIN — Redirect if no token exists
 // ======================================================================
-
-// ======================================================================
-// LOGOUT
-// ======================================================================
-function logout() {
-  localStorage.removeItem("token");
-  window.location.href = "/login.html";
+const TOKEN = localStorage.getItem("token");
+if (!TOKEN) {
+  window.location.href = "/login.html"; // Force login before using chat
 }
 
 // ======================================================================
@@ -54,7 +50,7 @@ async function sendMsg() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("token"),
+        Authorization: "Bearer " + TOKEN,
       },
       body: JSON.stringify({ message: msg }),
     });
@@ -80,7 +76,7 @@ document.getElementById("msgInput").addEventListener("keydown", (e) => {
 async function motivate() {
   try {
     const res = await fetch(`/api/messages/motivate`, {
-      headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+      headers: { Authorization: "Bearer " + TOKEN },
     });
 
     const data = await res.json();
@@ -96,7 +92,7 @@ async function motivate() {
 async function loadHistory() {
   try {
     const res = await fetch(`/api/history`, {
-      headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+      headers: { Authorization: "Bearer " + TOKEN },
     });
 
     const history = await res.json();
@@ -134,7 +130,7 @@ async function deleteHistory() {
   try {
     const res = await fetch(`/api/delete-history`, {
       method: "DELETE",
-      headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+      headers: { Authorization: "Bearer " + TOKEN },
     });
 
     const data = await res.json();
@@ -161,7 +157,7 @@ function openAccount() {
   document.getElementById("accountSection").style.display = "block";
 
   fetch(`/api/profile`, {
-    headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+    headers: { Authorization: "Bearer " + TOKEN },
   })
     .then((res) => res.json())
     .then((data) => {
@@ -188,7 +184,7 @@ function closeAccount() {
 }
 
 // ======================================================================
-// PAGE NAVIGATION / MENU
+// NAVIGATION & MENU
 // ======================================================================
 function showPage(id) {
   closeMenu();
