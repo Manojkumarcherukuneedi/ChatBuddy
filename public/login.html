@@ -4,28 +4,20 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ChatBuddy - Login</title>
-
-  <!-- Styles -->
   <link rel="stylesheet" href="/css/styles.css" />
 </head>
 
 <body>
-
   <div class="login-wrapper">
     <div class="login-card">
       <h2 class="logo-text">ChatBuddy</h2>
 
-      <!-- Username -->
-      <input id="username" placeholder="Username" autocomplete="username" />
+      <input id="username" placeholder="Username" />
+      <input id="password" type="password" placeholder="Password" />
 
-      <!-- Password -->
-      <input id="password" type="password" placeholder="Password" autocomplete="current-password" />
-
-      <!-- Login Button -->
       <button id="loginBtn">Login</button>
 
-      <p class="muted">
-        Don’t have an account?
+      <p class="muted">Don’t have an account?
         <a href="/register.html">Sign Up</a>
       </p>
 
@@ -33,25 +25,17 @@
     </div>
   </div>
 
-  <!-- Login Script -->
+  <!-- Correct script path -->
   <script src="/js/login.js"></script>
 
   <script>
-    // ENTER key login support
-    document.addEventListener("DOMContentLoaded", () => {
-      const pwdInput = document.getElementById("password");
-      const loginBtn = document.getElementById("loginBtn");
-
-      if (pwdInput && loginBtn) {
-        pwdInput.addEventListener("keydown", (e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            loginBtn.click();
-          }
-        });
+    // Press Enter to login
+    document.getElementById("password").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        document.getElementById("loginBtn").click();
       }
     });
   </script>
-
 </body>
 </html>
