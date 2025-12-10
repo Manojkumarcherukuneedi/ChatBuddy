@@ -231,24 +231,25 @@ function applySettings() {
   const size = localStorage.getItem("fontSize") || "medium";
   const theme = localStorage.getItem("theme") || "dark";
 
-  // Font size
-  const chat = document.getElementById("chatContainer");
-  chat.classList.remove("font-small", "font-medium", "font-large");
-  chat.classList.add(`font-${size}`);
+  // Apply font size globally
+  document.body.classList.remove("font-small", "font-medium", "font-large");
+  document.body.classList.add(`font-${size}`);
 
-  // Theme
+  // Apply theme
   if (theme === "light") {
     document.body.classList.remove("dark");
   } else {
     document.body.classList.add("dark");
   }
 
-  // Pre-select radios (only when settings page is open)
-  const r1 = document.querySelector(`input[name="fontSize"][value="${size}"]`);
-  const r2 = document.querySelector(`input[name="theme"][value="${theme}"]`);
-  if (r1) r1.checked = true;
-  if (r2) r2.checked = true;
+  // Pre-select radios only if they exist
+  const sizeRadio = document.querySelector(`input[name="fontSize"][value="${size}"]`);
+  const themeRadio = document.querySelector(`input[name="theme"][value="${theme}"]`);
+
+  if (sizeRadio) sizeRadio.checked = true;
+  if (themeRadio) themeRadio.checked = true;
 }
+
 
 applySettings(); // run at startup
 
