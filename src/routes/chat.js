@@ -20,8 +20,9 @@ router.post("/", authRequired, async (req, res) => {
 
   try {
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash-latest"   // ✅ FIXED
-    });
+    model: "gemini-1.5-flash"
+});
+
 
     const prompt = `
 You are ChatBuddy.
