@@ -20,7 +20,7 @@ body.dark {
 }
 
 /* =========================================
-   LOGIN PAGE
+   LOGIN PAGE (for login.html)
 ========================================= */
 
 .login-wrapper {
@@ -56,6 +56,8 @@ input {
   border-radius: 10px;
   background: #ffffff;
   font-size: 15px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
 }
 
 button {
@@ -69,6 +71,7 @@ button {
   cursor: pointer;
   transition: 0.3s;
   font-weight: bold;
+  border: 1px solid #000;
 }
 
 button:hover {
@@ -80,7 +83,7 @@ button:hover {
 .error { color: #ff3333; }
 
 /* =========================================
-   CHAT UI
+   CHAT UI (HOME PAGE)
 ========================================= */
 
 .chat-container {
@@ -118,16 +121,18 @@ h1 {
   overflow-y: auto;
   text-align: left;
   margin-bottom: 15px;
+  box-sizing: border-box;
 }
 
 body.dark .chat-box {
-  background: rgba(20,20,20,0.7);
+  background: rgba(20, 20, 20, 0.7);
 }
 
-/* Buttons inside chat */
+/* Chat buttons inside container */
 .chat-container button {
   width: 90%;
-  margin-bottom: 10px;
+  margin: 10px auto 0 auto;
+  display: block;
 }
 
 /* Danger Button */
@@ -141,7 +146,7 @@ body.dark .chat-box {
   background: #ff2a2a !important;
 }
 
-/* Messages (original styling) */
+/* Chat message bubbles */
 .msg-user {
   background: rgba(255, 255, 255, 0.85);
   padding: 8px 12px;
@@ -164,23 +169,21 @@ body.dark .msg-user {
   background: #2d2d2d;
 }
 
-/* =========================================
-   ⭐ FIX 1 & FIX 2 — Proper Left Alignment + Spacing
-========================================= */
-.msg-user, .msg-bot {
+/* Ensure proper alignment + spacing */
+.msg-user,
+.msg-bot {
   display: block !important;
   text-align: left !important;
   margin: 6px 0 !important;
 }
 
-/* =========================================
-   ⭐ FIX 3 — Center Message Input
-========================================= */
+/* Centered message input inside chat card */
 .chat-container input#msgInput {
   display: block !important;
   width: 90% !important;
   margin-left: auto !important;
   margin-right: auto !important;
+  margin-top: 0;
 }
 
 /* Animation */
@@ -193,7 +196,7 @@ body.dark .msg-user {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* History Header */
+/* History time header */
 .time-header {
   text-align: center;
   background: rgba(0,0,0,0.3);
@@ -244,6 +247,7 @@ body.dark .msg-user {
 .menu-list {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .menu-list li {
@@ -275,27 +279,29 @@ body.dark .msg-user {
 }
 
 /* =========================================
-   HIDDEN PAGES
+   HIDDEN PAGES (Settings / Privacy / etc.)
 ========================================= */
 
 .page {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 50%;
+  left: 50%;
   width: 420px;
-  height: 100%;
   background: linear-gradient(90deg, #1C9DBD, #6AD3F6) !important;
   backdrop-filter: blur(12px) !important;
   -webkit-backdrop-filter: blur(12px) !important;
   border-radius: 18px;
   padding: 25px;
   display: none;
-  overflow-y: auto;
-  text-align: left;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  box-sizing: border-box;
+  color: #000;
 }
 
 body.dark .page {
   background: linear-gradient(90deg, #0a0a0a, #2a2a2a) !important;
+  color: white;
 }
 
 .page h2 {
@@ -303,34 +309,127 @@ body.dark .page {
   margin-bottom: 20px;
 }
 
-.hidden { display: none !important; }
-
-/* Account box etc */
-.hidden-section {
-  display: none;
-  padding: 20px;
-  background: rgba(255,255,255,0.15);
-  border-radius: 15px;
-  width: 90%;
-  margin: 20px auto;
-  backdrop-filter: blur(8px);
-  color: white;
+.card-block {
+  background: rgba(255,255,255,0.9);
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-size: 15px;
 }
 
-.account-box {
-  background: rgba(255,255,255,0.2);
-  padding: 12px 15px;
-  margin-bottom: 15px;
-  border-radius: 10px;
+body.dark .card-block {
+  background: rgba(30,30,30,0.95);
 }
 
-.back-btn {
+.full-input {
   width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
-  background: #f44336;
-  color: white;
-  font-size: 18px;
-  cursor: pointer;
+  margin: 8px 0;
 }
+
+.primary-btn {
+  background: #008c9e;
+  color: white;
+  border: none;
+}
+
+.section-title {
+  margin-top: 25px;
+}
+
+.block-label {
+  font-size: 18px;
+}
+
+.version-text {
+  text-align: center;
+  margin-top: 30px;
+}
+
+/* =========================================
+   TOGGLE SWITCH (Notifications)
+========================================= */
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+  float: right;
+}
+
+.switch input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  background-color: #ccc;
+  border-radius: 26px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background:white;
+  border-radius: 50%;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #21c4d3;
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+/* =========================================
+   ACCOUNT BUTTON + DROPDOWN
+========================================= */
+
+#account-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+  z-index: 999;
+}
+
+#account-btn img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+#account-dropdown {
+  position: absolute;
+  top: 75px;
+  right: 20px;
+  width: 230px;
+  background: rgba(255,255,255,0.95);
+  border-radius: 12px;
+  padding: 15px;
+  display: none;
+  box-shadow: 0px 5px 15px rgba(0,0,0,0.25);
+  z-index: 999;
+  color: #000;
+  box-sizing: border-box;
+}
+
+#account-dropdown.show {
+  display: block;
+}
+
+/* Utility */
+.hidden { display: none !important; }
