@@ -1,10 +1,8 @@
 // ======================================================================
-// REQUIRE LOGIN — Redirect if no token exists
+// REQUIRE LOGIN
 // ======================================================================
 const TOKEN = localStorage.getItem("token");
-if (!TOKEN) {
-  window.location.href = "/login.html";
-}
+if (!TOKEN) window.location.href = "/login.html";
 
 // ======================================================================
 // DARK MODE
@@ -13,13 +11,12 @@ function toggleDark() {
   document.body.classList.toggle("dark");
   localStorage.setItem("darkMode", document.body.classList.contains("dark"));
 }
-
 if (localStorage.getItem("darkMode") === "true") {
   document.body.classList.add("dark");
 }
 
 // ======================================================================
-// ADD MESSAGE TO CHAT WINDOW
+// ADD MESSAGE TO CHAT WINDOW  (LEFT ALIGNED + BUBBLE STYLE)
 // ======================================================================
 function addMessage(text, type) {
   if (!text) return;
@@ -62,7 +59,7 @@ async function sendMsg() {
   }
 }
 
-// ENTER to send message
+// ENTER key = send
 document.getElementById("msgInput").addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
@@ -87,7 +84,7 @@ async function motivate() {
 }
 
 // ======================================================================
-// LOAD HISTORY (Auto-scrolls to TOP)
+// LOAD HISTORY (LEFT ALIGNED)
 // ======================================================================
 async function loadHistory() {
   try {
@@ -109,25 +106,15 @@ async function loadHistory() {
 
     const header = document.createElement("div");
     header.className = "time-header";
-    header.textContent = "🗓️ " + fixedDate.toLocaleString("en-US");
+    header.textContent = "🗓️ " + fixedDate.toLocaleString();
     box.appendChild(header);
 
     history.forEach((h) => {
-      if (h.user_text) {
-        const u = document.createElement("div");
-        u.className = "msg-user fade-in";
-        u.textContent = h.user_text;
-        box.appendChild(u);
-      }
-      if (h.bot_text) {
-        const b = document.createElement("div");
-        b.className = "msg-bot fade-in";
-        b.textContent = h.bot_text;
-        box.appendChild(b);
-      }
+      if (h.user_text) addMessage(h.user_text, "user");
+      if (h.bot_text) addMessage(h.bot_text, "bot");
     });
 
-    box.scrollTop = 0;
+    box.scrollTop = box.scrollHeight;
   } catch {
     addMessage("⚠️ Couldn't load history right now.", "bot");
   }
@@ -149,11 +136,8 @@ async function deleteHistory() {
     const box = document.getElementById("chatBox");
     box.innerHTML = "";
 
-    if (data.success) {
-      addMessage("History cleared! 🗑️", "bot");
-    } else {
-      addMessage("❌ Failed to delete history.", "bot");
-    }
+    if (data.success) addMessage("History cleared! 🗑️", "bot");
+    else addMessage("❌ Failed to delete history.", "bot");
   } catch {
     addMessage("❌ Error deleting history.", "bot");
   }
@@ -196,7 +180,7 @@ function closeAccount() {
 }
 
 // ======================================================================
-// MENU PAGE FUNCTIONS
+// MENU PAGE CONTROLS
 // ======================================================================
 function showPage(id) {
   closeMenu();
@@ -218,37 +202,25 @@ function goHome() {
   addMessage("Welcome back! 👋 Start chatting again!", "bot");
 }
 
-function openSettings() {
-  showPage("settingsPage");
-}
-
-function openPrivacy() {
-  showPage("privacyPage");
-}
-
-function openNotifications() {
-  showPage("notificationsPage");
-}
-
-function openAbout() {
-  showPage("aboutPage");
-}
+function openSettings() { showPage("settingsPage"); }
+function openPrivacy() { showPage("privacyPage"); }
+function openNotifications() { showPage("notificationsPage"); }
+function openAbout() { showPage("aboutPage"); }
 
 // ======================================================================
-// SIDEBAR MENU
+// SIDE MENU
 // ======================================================================
 function openMenu() {
   document.getElementById("sideMenu").style.left = "0px";
   document.getElementById("overlay").style.display = "block";
 }
-
 function closeMenu() {
   document.getElementById("sideMenu").style.left = "-260px";
   document.getElementById("overlay").style.display = "none";
 }
 
 // ======================================================================
-// LOGOUT — FIXED 🔥
+// LOGOUT
 // ======================================================================
 function logout() {
   console.log("Logging out...");
