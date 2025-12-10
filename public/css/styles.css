@@ -143,7 +143,8 @@ body.dark .msg-user { background: #2d2d2d; }
 ========================================= */
 .page {
   position: fixed !important;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   width: 100vw !important;
   height: 100vh !important;
   background: linear-gradient(135deg, #26D0CE, #1A2980) !important;
@@ -154,7 +155,6 @@ body.dark .msg-user { background: #2d2d2d; }
   display: none;
   z-index: 950 !important;
 }
-
 body.dark .page {
   background: linear-gradient(135deg, #0e0e0e, #232323) !important;
 }
@@ -170,12 +170,14 @@ body.dark .page {
 /* Option Sections */
 .section {
   background: rgba(255,255,255,0.18);
-  padding: 15px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  backdrop-filter: blur(10px);
+  padding: 18px;
+  border-radius: 14px;
+  margin-bottom: 25px;
+  backdrop-filter: blur(8px);
   color: white;
+  border: 1px solid rgba(255,255,255,0.25);
 }
+
 
 /* =========================================
    TOGGLE SWITCH
