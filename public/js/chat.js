@@ -3,7 +3,7 @@
 // ======================================================================
 const TOKEN = localStorage.getItem("token");
 if (!TOKEN) {
-  window.location.href = "/login.html"; // Force login before using chat
+  window.location.href = "/login.html";
 }
 
 // ======================================================================
@@ -19,18 +19,20 @@ if (localStorage.getItem("darkMode") === "true") {
 }
 
 // ======================================================================
-// ADD MESSAGE
+// ADD MESSAGE TO CHAT WINDOW
 // ======================================================================
 function addMessage(text, type) {
   if (!text) return;
 
   const box = document.getElementById("chatBox");
-  const div = document.createElement("div");
+  const msg = document.createElement("div");
 
-  div.className = type === "user" ? "msg-user fade-in" : "msg-bot fade-in";
-  div.textContent = text;
+  msg.className = type === "user" ? "msg-user fade-in" : "msg-bot fade-in";
+  msg.textContent = text;
 
-  box.appendChild(div);
+  box.appendChild(msg);
+
+  // Auto-scroll DOWN only when adding real-time messages
   box.scrollTop = box.scrollHeight;
 }
 
@@ -58,7 +60,7 @@ async function sendMsg() {
     const data = await res.json();
     addMessage(data.reply || "⚠️ AI did not respond.", "bot");
   } catch {
-    addMessage("⚠️ Error contacting server", "bot");
+    addMessage("⚠️ Error contacting server.", "bot");
   }
 }
 
@@ -87,7 +89,7 @@ async function motivate() {
 }
 
 // ======================================================================
-// LOAD HISTORY
+// LOAD HISTORY  (Auto-scrolls to TOP)
 // ======================================================================
 async function loadHistory() {
   try {
@@ -104,20 +106,36 @@ async function loadHistory() {
       return;
     }
 
-    let first = history[0];
-    let fixedDate = new Date(first.created_at.replace(" ", "T") + "Z");
+    // Timestamp Header
+    const first = history[0];
+    const fixedDate = new Date(first.created_at.replace(" ", "T") + "Z");
 
     const header = document.createElement("div");
     header.className = "time-header";
     header.textContent = "🗓️ " + fixedDate.toLocaleString("en-US");
     box.appendChild(header);
 
+    // Load messages in order WITHOUT forcing scroll down
     history.forEach((h) => {
-      if (h.user_text) addMessage(h.user_text, "user");
-      if (h.bot_text) addMessage(h.bot_text, "bot");
+      if (h.user_text) {
+        const div = document.createElement("div");
+        div.className = "msg-user fade-in";
+        div.textContent = h.user_text;
+        box.appendChild(div);
+      }
+      if (h.bot_text) {
+        const div = document.createElement("div");
+        div.className = "msg-bot fade-in";
+        div.textContent = h.bot_text;
+        box.appendChild(div);
+      }
     });
+
+    // ⭐ Scroll to TOP automatically
+    box.scrollTop = 0;
+
   } catch {
-    addMessage("⚠️ Couldn't load history right now", "bot");
+    addMessage("⚠️ Couldn't load history right now.", "bot");
   }
 }
 
@@ -135,14 +153,16 @@ async function deleteHistory() {
 
     const data = await res.json();
 
+    const box = document.getElementById("chatBox");
+    box.innerHTML = "";
+
     if (data.success) {
-      document.getElementById("chatBox").innerHTML = "";
       addMessage("History cleared! 🗑️", "bot");
     } else {
-      addMessage("❌ Failed to delete history", "bot");
+      addMessage("❌ Failed to delete history.", "bot");
     }
   } catch {
-    addMessage("❌ Error deleting history", "bot");
+    addMessage("❌ Error deleting history.", "bot");
   }
 }
 
@@ -163,8 +183,7 @@ function openAccount() {
     .then((data) => {
       document.getElementById("accName").textContent = data.name || "Unknown";
 
-      let fixedDate = new Date(data.created.replace(" ", "T") + "Z");
-
+      const fixedDate = new Date(data.created.replace(" ", "T") + "Z");
       document.getElementById("accCreated").textContent =
         fixedDate.toLocaleDateString("en-US", {
           year: "numeric",
@@ -184,13 +203,12 @@ function closeAccount() {
 }
 
 // ======================================================================
-// NAVIGATION & MENU
+// MENU & NAVIGATION
 // ======================================================================
 function showPage(id) {
   closeMenu();
-  document.getElementById("chatContainer").style.display = "none";
-
   document.querySelectorAll(".page").forEach((p) => (p.style.display = "none"));
+  document.getElementById("chatContainer").style.display = "none";
   document.getElementById(id).style.display = "block";
 }
 
@@ -202,6 +220,7 @@ function closePages() {
 function goHome() {
   closePages();
   closeMenu();
+
   const box = document.getElementById("chatBox");
   box.innerHTML = "";
   addMessage("Welcome back! 👋 Start chatting again!", "bot");
