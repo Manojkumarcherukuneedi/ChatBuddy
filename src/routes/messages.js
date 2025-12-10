@@ -3,21 +3,31 @@ const router = express.Router();
 const { getDB, run } = require("../models/db");
 const { authRequired } = require("../middleware/auth");
 
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+
+// Initialize Gemini
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
 router.get("/motivate", authRequired, async (req, res) => {
   const db = getDB();
   const userId = req.user.id;
 
-  const messages = [
-    "You are capable of amazing things! 🌟",
-    "Small progress is still progress 💫",
-    "You're doing great, keep going! 💪",
-    "Every day is a chance to grow 🌱",
-    "Believe in yourself—you got this! 🚀"
-  ];
-
-  const botText = messages[Math.floor(Math.random() * messages.length)];
-
   try {
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash"
+    });
+
+    const prompt = `
+Give a short motivational quote (1–2 sentences only).
+Do not write long paragraphs.
+Be uplifting and positive.
+`;
+
+    const result = await model.generateContent(prompt);
+
+    const botText = result?.response?.text() || "Keep going — you got this! 💪";
+
+    // Save message in DB
     await run(
       db,
       `INSERT INTO history (user_id, user_text, bot_text)
@@ -26,9 +36,12 @@ router.get("/motivate", authRequired, async (req, res) => {
     );
 
     res.json({ message: botText });
+
   } catch (err) {
-    console.error("SAVE ERROR:", err);
-    res.json({ message: "Motivation saved failed" });
+    console.error("MOTIVATION ERROR:", err);
+    res.json({
+      message: "🔥 Couldn't fetch motivation right now 😅"
+    });
   }
 });
 
