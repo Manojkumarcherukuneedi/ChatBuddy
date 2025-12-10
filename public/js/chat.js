@@ -1,10 +1,6 @@
 // ======================================================================
-// BASE API URL (AUTO-DETECT: Localhost OR Render Production)
+// NO API_BASE — Render and Localhost both use relative routes
 // ======================================================================
-const API_BASE =
-  window.location.hostname === "localhost"
-    ? "http://localhost:3000"
-    : "https://chatbuddy-l38k.onrender.com";
 
 // ======================================================================
 // LOGOUT
@@ -27,7 +23,7 @@ if (localStorage.getItem("darkMode") === "true") {
 }
 
 // ======================================================================
-// ADD MESSAGE TO UI
+// ADD MESSAGE
 // ======================================================================
 function addMessage(text, type) {
   if (!text) return;
@@ -43,7 +39,7 @@ function addMessage(text, type) {
 }
 
 // ======================================================================
-// SEND CHAT MESSAGE
+// SEND MESSAGE
 // ======================================================================
 async function sendMsg() {
   const input = document.getElementById("msgInput");
@@ -54,7 +50,7 @@ async function sendMsg() {
   input.value = "";
 
   try {
-    const res = await fetch(`${API_BASE}/api/chat`, {
+    const res = await fetch(`/api/chat`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -65,12 +61,12 @@ async function sendMsg() {
 
     const data = await res.json();
     addMessage(data.reply || "⚠️ AI did not respond.", "bot");
-  } catch (err) {
+  } catch {
     addMessage("⚠️ Error contacting server", "bot");
   }
 }
 
-// ENTER KEY = SEND
+// ENTER TO SEND
 document.getElementById("msgInput").addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
@@ -83,13 +79,13 @@ document.getElementById("msgInput").addEventListener("keydown", (e) => {
 // ======================================================================
 async function motivate() {
   try {
-    const res = await fetch(`${API_BASE}/api/messages/motivate`, {
+    const res = await fetch(`/api/messages/motivate`, {
       headers: { Authorization: "Bearer " + localStorage.getItem("token") },
     });
 
     const data = await res.json();
     addMessage(data.message, "bot");
-  } catch (err) {
+  } catch {
     addMessage("🔥 Couldn't fetch motivation right now 😅", "bot");
   }
 }
@@ -99,7 +95,7 @@ async function motivate() {
 // ======================================================================
 async function loadHistory() {
   try {
-    const res = await fetch(`${API_BASE}/api/history`, {
+    const res = await fetch(`/api/history`, {
       headers: { Authorization: "Bearer " + localStorage.getItem("token") },
     });
 
@@ -112,7 +108,6 @@ async function loadHistory() {
       return;
     }
 
-    // Fix SQLite timestamp into readable format
     let first = history[0];
     let fixedDate = new Date(first.created_at.replace(" ", "T") + "Z");
 
@@ -137,7 +132,7 @@ async function deleteHistory() {
   if (!confirm("Delete ALL chat history?")) return;
 
   try {
-    const res = await fetch(`${API_BASE}/api/delete-history`, {
+    const res = await fetch(`/api/delete-history`, {
       method: "DELETE",
       headers: { Authorization: "Bearer " + localStorage.getItem("token") },
     });
@@ -165,7 +160,7 @@ function openAccount() {
   document.getElementById("chatContainer").style.display = "none";
   document.getElementById("accountSection").style.display = "block";
 
-  fetch(`${API_BASE}/api/profile`, {
+  fetch(`/api/profile`, {
     headers: { Authorization: "Bearer " + localStorage.getItem("token") },
   })
     .then((res) => res.json())
