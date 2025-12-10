@@ -1,12 +1,12 @@
-// ======================================================================
-// REQUIRE LOGIN
-// ======================================================================
+/* ======================================================================
+   REQUIRE LOGIN
+====================================================================== */
 const TOKEN = localStorage.getItem("token");
 if (!TOKEN) window.location.href = "/login.html";
 
-// ======================================================================
-// DARK MODE
-// ======================================================================
+/* ======================================================================
+   DARK MODE (Base Toggle)
+====================================================================== */
 function toggleDark() {
   document.body.classList.toggle("dark");
   localStorage.setItem("darkMode", document.body.classList.contains("dark"));
@@ -15,9 +15,9 @@ if (localStorage.getItem("darkMode") === "true") {
   document.body.classList.add("dark");
 }
 
-// ======================================================================
-// ADD MESSAGE TO CHAT WINDOW  (LEFT ALIGNED + BUBBLE STYLE)
-// ======================================================================
+/* ======================================================================
+   ADD MESSAGE TO CHAT WINDOW
+====================================================================== */
 function addMessage(text, type) {
   if (!text) return;
 
@@ -31,9 +31,9 @@ function addMessage(text, type) {
   box.scrollTop = box.scrollHeight;
 }
 
-// ======================================================================
-// SEND MESSAGE
-// ======================================================================
+/* ======================================================================
+   SEND MESSAGE
+====================================================================== */
 async function sendMsg() {
   const input = document.getElementById("msgInput");
   const msg = input.value.trim();
@@ -59,7 +59,7 @@ async function sendMsg() {
   }
 }
 
-// ENTER key = send
+// ENTER = send
 document.getElementById("msgInput").addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
@@ -67,15 +67,14 @@ document.getElementById("msgInput").addEventListener("keydown", (e) => {
   }
 });
 
-// ======================================================================
-// MOTIVATE ME
-// ======================================================================
+/* ======================================================================
+   MOTIVATE ME
+====================================================================== */
 async function motivate() {
   try {
     const res = await fetch(`/api/messages/motivate`, {
       headers: { Authorization: "Bearer " + TOKEN },
     });
-
     const data = await res.json();
     addMessage(data.message, "bot");
   } catch {
@@ -83,9 +82,9 @@ async function motivate() {
   }
 }
 
-// ======================================================================
-// LOAD HISTORY (LEFT ALIGNED)
-// ======================================================================
+/* ======================================================================
+   LOAD HISTORY
+====================================================================== */
 async function loadHistory() {
   try {
     const res = await fetch(`/api/history`, {
@@ -109,9 +108,9 @@ async function loadHistory() {
     header.textContent = "🗓️ " + fixedDate.toLocaleString();
     box.appendChild(header);
 
-    history.forEach((h) => {
-      if (h.user_text) addMessage(h.user_text, "user");
-      if (h.bot_text) addMessage(h.bot_text, "bot");
+    history.forEach((msg) => {
+      if (msg.user_text) addMessage(msg.user_text, "user");
+      if (msg.bot_text) addMessage(msg.bot_text, "bot");
     });
 
     box.scrollTop = box.scrollHeight;
@@ -120,9 +119,9 @@ async function loadHistory() {
   }
 }
 
-// ======================================================================
-// DELETE HISTORY
-// ======================================================================
+/* ======================================================================
+   DELETE HISTORY
+====================================================================== */
 async function deleteHistory() {
   if (!confirm("Delete ALL chat history?")) return;
 
@@ -133,8 +132,7 @@ async function deleteHistory() {
     });
 
     const data = await res.json();
-    const box = document.getElementById("chatBox");
-    box.innerHTML = "";
+    document.getElementById("chatBox").innerHTML = "";
 
     if (data.success) addMessage("History cleared! 🗑️", "bot");
     else addMessage("❌ Failed to delete history.", "bot");
@@ -143,9 +141,9 @@ async function deleteHistory() {
   }
 }
 
-// ======================================================================
-// ACCOUNT PAGE
-// ======================================================================
+/* ======================================================================
+   ACCOUNT PAGE
+====================================================================== */
 function openAccount() {
   closeMenu();
   closePages();
@@ -159,7 +157,6 @@ function openAccount() {
     .then((res) => res.json())
     .then((data) => {
       document.getElementById("accName").textContent = data.name || "Unknown";
-
       const fixedDate = new Date(data.created.replace(" ", "T") + "Z");
       document.getElementById("accCreated").textContent =
         fixedDate.toLocaleDateString("en-US", {
@@ -179,13 +176,12 @@ function closeAccount() {
   document.getElementById("chatContainer").style.display = "block";
 }
 
-// ======================================================================
-// MENU PAGE CONTROLS
-// ======================================================================
+/* ======================================================================
+   PAGE NAVIGATION
+====================================================================== */
 function showPage(id) {
   closeMenu();
   document.getElementById("chatContainer").style.display = "none";
-
   document.querySelectorAll(".page").forEach((p) => (p.style.display = "none"));
   document.getElementById(id).style.display = "block";
 }
@@ -207,9 +203,9 @@ function openPrivacy() { showPage("privacyPage"); }
 function openNotifications() { showPage("notificationsPage"); }
 function openAbout() { showPage("aboutPage"); }
 
-// ======================================================================
-// SIDE MENU
-// ======================================================================
+/* ======================================================================
+   SIDE MENU
+====================================================================== */
 function openMenu() {
   document.getElementById("sideMenu").style.left = "0px";
   document.getElementById("overlay").style.display = "block";
@@ -219,56 +215,51 @@ function closeMenu() {
   document.getElementById("overlay").style.display = "none";
 }
 
-// ======================================================================
-// LOGOUT
-// ======================================================================
+/* ======================================================================
+   LOGOUT
+====================================================================== */
 function logout() {
-  console.log("Logging out...");
   localStorage.removeItem("token");
   window.location.href = "/login.html";
 }
-// ======================================================================
-// SETTINGS SYSTEM (Font Size + Theme)
-// ======================================================================
 
-// Apply settings on page load
+/* ======================================================================
+   SETTINGS SYSTEM (Font Size + Theme)
+====================================================================== */
+
 function applySettings() {
   const size = localStorage.getItem("fontSize") || "medium";
   const theme = localStorage.getItem("theme") || "dark";
 
-  // Apply font size to chat container
+  // Font size
   const chat = document.getElementById("chatContainer");
   chat.classList.remove("font-small", "font-medium", "font-large");
-  chat.classList.add("font-" + size);
+  chat.classList.add(`font-${size}`);
 
-  // Apply theme
+  // Theme
   if (theme === "light") {
     document.body.classList.remove("dark");
   } else {
     document.body.classList.add("dark");
   }
 
-  // Pre-select radio buttons if they exist on the page
-  const sizeRadio = document.querySelector(`input[name="fontSize"][value="${size}"]`);
-  const themeRadio = document.querySelector(`input[name="theme"][value="${theme}"]`);
-
-  if (sizeRadio) sizeRadio.checked = true;
-  if (themeRadio) themeRadio.checked = true;
+  // Pre-select radios (only when settings page is open)
+  const r1 = document.querySelector(`input[name="fontSize"][value="${size}"]`);
+  const r2 = document.querySelector(`input[name="theme"][value="${theme}"]`);
+  if (r1) r1.checked = true;
+  if (r2) r2.checked = true;
 }
 
-applySettings(); // Run settings on load
+applySettings(); // run at startup
 
-
-// Save settings when clicking "Save"
 function saveSettings() {
   const size = document.querySelector('input[name="fontSize"]:checked').value;
   const theme = document.querySelector('input[name="theme"]:checked').value;
 
-  // Save choices
   localStorage.setItem("fontSize", size);
   localStorage.setItem("theme", theme);
 
-  applySettings(); // Reapply immediately
+  applySettings();
 
   alert("Settings saved!");
 }

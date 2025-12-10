@@ -278,20 +278,25 @@ button {
 <div id="settingsPage" class="page">
   <h2>Settings</h2>
 
+  <!-- Font Size Section -->
   <div class="section">
-    <h3>Appearance</h3>
-    <p>• Toggle dark mode</p>
-    <p>• Customize chat bubbles (coming soon)</p>
+    <h3>Font Size</h3>
+    <label><input type="radio" name="fontSize" value="small"> Small</label><br>
+    <label><input type="radio" name="fontSize" value="medium" checked> Medium</label><br>
+    <label><input type="radio" name="fontSize" value="large"> Large</label>
   </div>
 
+  <!-- Theme Section -->
   <div class="section">
-    <h3>Account</h3>
-    <p>• Change username (coming soon)</p>
-    <p>• Delete account (coming soon)</p>
+    <h3>Theme Colors</h3>
+    <label><input type="radio" name="theme" value="light"> Light</label><br>
+    <label><input type="radio" name="theme" value="dark" checked> Dark</label>
   </div>
 
+  <button onclick="saveSettings()">Save</button>
   <button onclick="closePages()">Back</button>
 </div>
+
 
 <!-- PRIVACY PAGE -->
 <div id="privacyPage" class="page">
