@@ -124,7 +124,7 @@ body.dark {
 }
 
 /* =========================================
-   CHAT UI
+   CHAT UI (HOME PAGE) — UNCHANGED
 ========================================= */
 .chat-container {
   width: 420px;
@@ -144,6 +144,18 @@ body.dark {
   border-radius: 12px;
   overflow-y: auto;
   margin-bottom: 15px;
+}
+
+button {
+  width: 90%;
+  padding: 12px;
+  border-radius: 12px;
+  border: 2px solid black;
+  background: white;
+  margin-bottom: 10px;
+  font-weight: bold;
+  font-size: 17px;
+  cursor: pointer;
 }
 
 /* =========================================
@@ -167,7 +179,7 @@ body.dark {
   margin-bottom: 20px;
 }
 
-/* Toggle switch CSS for Notifications */
+/* Toggle switch CSS */
 .switch {
   position: relative;
   display: inline-block;
@@ -188,9 +200,9 @@ body.dark {
   content: "";
   height: 20px; width: 20px;
   left: 3px; bottom: 3px;
-  background:#fff;
-  transition: .4s;
+  background:white;
   border-radius: 50%;
+  transition: .4s;
 }
 input:checked + .slider {
   background-color: #21c4d3;
@@ -219,7 +231,6 @@ input:checked + .slider:before {
 <!-- SIDEBAR -->
 <div id="sideMenu" class="side-menu">
   <div class="close-btn" onclick="closeMenu()">✕</div>
-
   <ul class="menu-list">
     <li onclick="goHome()">Home</li>
     <li onclick="openSettings()">Settings</li>
@@ -232,13 +243,11 @@ input:checked + .slider:before {
 
 <div id="overlay" class="overlay" onclick="closeMenu()"></div>
 
-<!-- CHAT UI -->
+<!-- HOME CHAT UI (UNTOUCHED) -->
 <div class="chat-container" id="chatContainer">
   <h1 onclick="goHome()">ChatBuddy</h1>
   <div class="toggle-dark" onclick="toggleDark()">🌙 Toggle Dark Mode</div>
-
   <div class="chat-box" id="chatBox"></div>
-
   <input id="msgInput" placeholder="Type your message..." />
   <button onclick="sendMsg()">Send</button>
   <button onclick="motivate()">Motivate me</button>
@@ -246,23 +255,18 @@ input:checked + .slider:before {
   <button class="danger-btn" onclick="deleteHistory()">Delete History</button>
 </div>
 
-
-<!-- ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐ -->
-<!--        ✅ REPLACED SECTIONS BELOW    -->
-<!-- ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐ -->
-
 <!-- SETTINGS PAGE -->
 <div id="settingsPage" class="page">
   <h2>Chat Preferences</h2>
 
-  <div style="background:#fff; padding:15px; border-radius:12px; margin-bottom:20px;">
+  <div style="background:white; padding:15px; border-radius:12px; margin-bottom:20px;">
     <h3>Font Size</h3>
     <label><input type="radio" name="fontSize" value="small"> Small</label><br>
     <label><input type="radio" name="fontSize" value="medium" checked> Medium</label><br>
     <label><input type="radio" name="fontSize" value="large"> Large</label>
   </div>
 
-  <div style="background:#fff; padding:15px; border-radius:12px;">
+  <div style="background:white; padding:15px; border-radius:12px;">
     <h3>Theme Colors</h3>
     <label><input type="radio" name="theme" value="light"> Light</label><br>
     <label><input type="radio" name="theme" value="dark" checked> Dark</label><br>
@@ -272,7 +276,6 @@ input:checked + .slider:before {
   <button style="margin-top:25px;">Save</button>
   <button onclick="closePages()" style="margin-top:10px;">Back</button>
 </div>
-
 
 <!-- PRIVACY PAGE -->
 <div id="privacyPage" class="page">
@@ -290,15 +293,12 @@ input:checked + .slider:before {
   <button onclick="closePages()" style="margin-top:20px;">Back to Home</button>
 </div>
 
-
 <!-- NOTIFICATIONS PAGE -->
 <div id="notificationsPage" class="page">
   <h2>Notifications</h2>
 
-  <div style="background:#fff; padding:15px; border-radius:12px;">
-    <label style="font-size:18px;">
-      Enable/Disable Notifications
-    </label>
+  <div style="background:white; padding:15px; border-radius:12px;">
+    <label style="font-size:18px;">Enable/Disable Notifications</label>
 
     <label class="switch" style="float:right;">
       <input type="checkbox" checked>
@@ -309,13 +309,12 @@ input:checked + .slider:before {
   <button onclick="closePages()" style="margin-top:30px;">Back</button>
 </div>
 
-
 <!-- ABOUT PAGE -->
 <div id="aboutPage" class="page">
   <h2>About ChatBuddy</h2>
 
   <p><strong>Welcome to Chat Buddy!</strong><br>
-  Your friendly digital companion designed to brighten your day, share positive vibes, and make conversations fun and engaging.</p>
+  Your friendly digital companion designed to brighten your day.</p>
 
   <p><strong>What Chat Buddy Offers:</strong><br>
   • Cheerful & supportive chats<br>
@@ -324,10 +323,10 @@ input:checked + .slider:before {
   • Relaxing & calming vibes</p>
 
   <p><strong>Why Chat Buddy?</strong><br>
-  Sometimes all we need is someone who listens, encourages, and spreads positivity. Chat Buddy is always here for you!</p>
+  Sometimes all we need is support and positivity. ChatBuddy is here for you always.</p>
 
   <p><strong>Our Mission:</strong><br>
-  To make technology feel like a friend, not just a tool.</p>
+  To make technology feel like a friend.</p>
 
   <p><strong>Developed By:</strong><br>
   Ashwin Kumar Mandaloju<br>
