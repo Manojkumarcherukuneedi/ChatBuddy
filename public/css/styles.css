@@ -117,25 +117,40 @@ h1 {
 body.dark .chat-box { background: rgba(20,20,20,0.7); }
 
 /* Chat messages */
-.msg-user, .msg-bot {
-  padding: 8px 12px;
-  border-radius: 10px;
-  max-width: 80%;
-  margin-bottom: 6px;
-  display: block;
+/* USER messages → right side */
+.msg-user {
+  background: #d1e7ff;
+  color: black;
+  padding: 10px 14px;
+  border-radius: 14px;
+  max-width: 75%;
+  margin-left: auto;   /* 👉 pushes to RIGHT */
+  margin-right: 0;
+  margin-bottom: 8px;
 }
 
-.msg-user { 
-  margin-left: auto; 
-  background: rgba(255,255,255,0.85); 
+/* BOT messages → left side */
+.msg-bot {
+  background: #ececec;
+  color: black;
+  padding: 10px 14px;
+  border-radius: 14px;
+  max-width: 75%;
+  margin-right: auto;  /* 👉 pushes to LEFT */
+  margin-left: 0;
+  margin-bottom: 8px;
 }
 
-.msg-bot { 
-  background: rgba(0,0,0,0.25); 
-  color: white; 
+/* Dark mode adjustments */
+body.dark .msg-bot {
+  background: #333;
+  color: #fff;
+}
+body.dark .msg-user {
+  background: #1c6dd0;
+  color: white;
 }
 
-body.dark .msg-user { background: #2d2d2d; }
 
 /* =========================================
    SIDEBAR MENU
