@@ -169,6 +169,40 @@ h1 {
   flex-direction: column; /* STACK BUBBLES */
   gap: 6px;               /* SPACE BETWEEN BUBBLES */
 }
+/* USER bubble → RIGHT */
+.msg-user {
+  background: #d1e7ff;
+  color: #000;
+  padding: 10px 14px;
+  border-radius: 14px;
+  max-width: 70%;
+  align-self: flex-end;   /* RIGHT SIDE */
+  margin: 6px 0;
+  text-align: left;
+}
+
+/* BOT bubble → LEFT */
+.msg-bot {
+  background: #ececec;
+  color: #000;
+  padding: 10px 14px;
+  border-radius: 14px;
+  max-width: 70%;
+  align-self: flex-start; /* LEFT SIDE */
+  margin: 6px 0;
+  text-align: left;
+}
+
+/* DARK MODE STYLE */
+body.dark .msg-user {
+  background: #1c6dd0;
+  color: white;
+}
+
+body.dark .msg-bot {
+  background: #2a2a2a;
+  color: white;
+}
 
 
 
