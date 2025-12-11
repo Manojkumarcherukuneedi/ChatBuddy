@@ -111,50 +111,49 @@ h1 {
   border-radius: 12px;
   overflow-y: auto;
   margin-bottom: 15px;
-  text-align: left;
 
-  /* REQUIRED FOR LEFT/RIGHT CHAT BUBBLES */
-  display: flex;
-  flex-direction: column;
-  text-align: left !important;
+  display: flex;          /* REQUIRED */
+  flex-direction: column; /* STACK BUBBLES */
+  gap: 6px;               /* SPACE BETWEEN BUBBLES */
 }
+
 
 body.dark .chat-box { background: rgba(20,20,20,0.7); }
 
 /* Chat messages */
-/* USER messages → right side */
+/* USER bubble → RIGHT */
 .msg-user {
   background: #d1e7ff;
-  color: black;
+  color: #000;
   padding: 10px 14px;
   border-radius: 14px;
-  max-width: 75%;
-  margin-left: auto;   /* 👉 pushes to RIGHT */
-  margin-right: 0;
-  margin-bottom: 8px;
+  max-width: 70%;
+  align-self: flex-end;   /* RIGHT ALIGN */
+  margin: 6px 0;
 }
 
-/* BOT messages → left side */
+/* BOT bubble → LEFT */
 .msg-bot {
-  background: #ececec;
-  color: black;
+  background: #3d4f59;
+  color: #fff;
   padding: 10px 14px;
   border-radius: 14px;
-  max-width: 75%;
-  margin-right: auto;  /* 👉 pushes to LEFT */
-  margin-left: 0;
-  margin-bottom: 8px;
+  max-width: 70%;
+  align-self: flex-start; /* LEFT ALIGN */
+  margin: 6px 0;
 }
 
-/* Dark mode adjustments */
-body.dark .msg-bot {
-  background: #333;
-  color: #fff;
-}
+/* DARK MODE COLOR FIX */
 body.dark .msg-user {
   background: #1c6dd0;
   color: white;
 }
+
+body.dark .msg-bot {
+  background: #2a2a2a;
+  color: white;
+}
+
 
 
 /* =========================================
