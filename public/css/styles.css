@@ -112,6 +112,11 @@ h1 {
   overflow-y: auto;
   margin-bottom: 15px;
   text-align: left;
+
+  /* REQUIRED FOR LEFT/RIGHT CHAT BUBBLES */
+  display: flex;
+  flex-direction: column;
+  text-align: left !important;
 }
 
 body.dark .chat-box { background: rgba(20,20,20,0.7); }
