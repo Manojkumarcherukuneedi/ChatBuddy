@@ -363,3 +363,25 @@ input:checked + .slider:before { transform: translateX(24px); }
 .font-small  { font-size: 14px !important; }
 .font-medium { font-size: 17px !important; }
 .font-large  { font-size: 20px !important; }
+
+/* Force bubble alignment */
+#chatBox {
+  text-align: left !important;
+}
+
+/* USER → right */
+.msg-user {
+  margin-left: auto !important;
+  margin-right: 0 !important;
+  display: block !important;
+  text-align: left !important;
+}
+
+/* BOT → left */
+.msg-bot {
+  margin-right: auto !important;
+  margin-left: 0 !important;
+  display: block !important;
+  text-align: left !important;
+}
+
