@@ -7,11 +7,14 @@ body {
   font-family: 'Poppins', sans-serif;
   background: linear-gradient(135deg, #26D0CE, #1A2980);
   height: 100vh;
+
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;   /* ✅ Instead of centering vertically */
+  padding-top: 30px;         /* Optional spacing */
   transition: 0.3s;
 }
+
 
 body.dark {
   background: linear-gradient(135deg, #0e0e0e, #232323);
