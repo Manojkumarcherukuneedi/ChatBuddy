@@ -62,4 +62,3 @@ ChatBuddy is a supportive chatbot designed to give users a safe, judgment-free s
 -  Hemanth Reddy Cheeruka
 -  Manoj Kumar Cherukuneedi
 -  Meet Saspara  
->>>>>>> c6d5bc6aa72e39d8f91ccb0ada409e15785ab208
